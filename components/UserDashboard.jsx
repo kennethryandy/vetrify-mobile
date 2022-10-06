@@ -1,5 +1,4 @@
 import { StyleSheet, View } from 'react-native'
-import React from 'react'
 import { Surface, Text, TouchableRipple, useTheme } from 'react-native-paper'
 import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
@@ -10,6 +9,10 @@ const UserDashboard = () => {
 
 	const navigateToPets = () => {
 		navigation.navigate('Pets');
+	}
+
+	const navigateToAppointments = () => {
+		navigation.navigate('Appointments');
 	}
 
 	return (
@@ -41,7 +44,7 @@ const UserDashboard = () => {
 					</TouchableRipple>
 				</Surface>
 				<Surface style={styles.cardSurface}>
-					<TouchableRipple onPress={() => { }}>
+					<TouchableRipple onPress={navigateToAppointments}>
 						<View style={styles.cardNav}>
 							<MaterialCommunityIcons
 								name="calendar-multiple-check"

@@ -13,6 +13,7 @@ import { AuthProvider } from './context/AuthContext';
 import { StatusBar } from 'expo-status-bar';
 import AddPets from './screens/AddPets';
 import AddPetLoading from './components/AddPetLoading';
+import EditProfile from './screens/EditProfile';
 
 const Stack = createStackNavigator();
 
@@ -54,6 +55,7 @@ export default function App () {
 							<Stack.Screen name="AddPets" component={AddPets} options={{ headerShown: false }} />
 							<Stack.Screen name="AddPetLoading" component={AddPetLoading} options={{ headerShown: false }} />
 							<Stack.Screen name="Profile" component={Profile} options={{ headerShown: false }} />
+							<Stack.Screen name="EditProfile" component={EditProfile} options={{ headerShown: false }} />
 						</Stack.Navigator>
 					</AuthProvider>
 				)}
