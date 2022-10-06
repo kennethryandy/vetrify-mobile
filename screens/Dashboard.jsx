@@ -3,11 +3,22 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Text, useTheme } from 'react-native-paper';
 import { signOut } from 'firebase/auth';
 import { auth } from '../firebase-config';
+import { useContext } from 'react';
+import AuthContext from '../context/AuthContext';
+import AdminDashboard from '../components/AdminDashboard';
+import UserDashboard from '../components/UserDashboard';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 const Dashboard = () => {
 	const { colors } = useTheme();
-
+	const { user, loading } = useContext(AuthContext);
 	const handleSignout = () => signOut(auth);
+
+	if (loading) {
+		return (
+			<Spinner visible={loading} color={colors.primary} />
+		)
+	}
 
 	return (
 		<SafeAreaView>
@@ -15,14 +26,11 @@ const Dashboard = () => {
 				<Text variant="titleMedium">Home</Text>
 				<TouchableOpacity onPress={handleSignout} style={styles.logout}><Text variant="labelLarge">Logout</Text></TouchableOpacity>
 			</View>
-			<View style={{ marginTop: 24, paddingHorizontal: 16 }}>
-				<Text variant='titleLarge'>
-					Welcome to <Text style={{ color: colors.primary }}>Nasya</Text>
-				</Text>
-				<Text variant='titleSmall'>
-					An Online Information System for <Text style={{ color: '#008018' }}> Veterinary Clinic</Text>
-				</Text>
-			</View>
+			{!user.role === 'admin' ? (
+				<AdminDashboard admin={user} />
+			) : (
+				<UserDashboard />
+			)}
 		</SafeAreaView>
 	)
 }

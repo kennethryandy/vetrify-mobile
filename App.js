@@ -10,6 +10,9 @@ import BottomTabNavigation from './components/BottomTabNavigation';
 import Signup from './screens/Signup';
 import Profile from './screens/Profile';
 import { AuthProvider } from './context/AuthContext';
+import { StatusBar } from 'expo-status-bar';
+import AddPets from './screens/AddPets';
+import AddPetLoading from './components/AddPetLoading';
 
 const Stack = createStackNavigator();
 
@@ -20,13 +23,15 @@ const paperTheme = {
 		primary: "#2563EB",
 		secondary: "#51DACF",
 		tertiary: "#E8FFC1",
-		lightgray: "#FEFAEC"
+		lightgray: "#FEFAEC",
+		success: "#28a745",
+		warning: "#ffc107",
+		info: "#17a2b8"
 	}
 }
 
 export default function App () {
 	const [user, loading] = useAuthState(auth);
-
 
 	if (loading) {
 		return <Spinner visible={loading} color={DefaultTheme.colors.primary} />;
@@ -34,6 +39,7 @@ export default function App () {
 
 	return (
 		<PaperProvider theme={paperTheme}>
+			<StatusBar />
 			<NavigationContainer>
 				{!user && !loading ? (
 					<Stack.Navigator>
@@ -45,6 +51,8 @@ export default function App () {
 						<Stack.Navigator>
 							<Stack.Screen name="BottomTabNavigation" component={BottomTabNavigation} options={{ headerShown: false }} />
 							<Stack.Screen name="Dashboard" component={Dashboard} options={{ headerShown: false }} />
+							<Stack.Screen name="AddPets" component={AddPets} options={{ headerShown: false }} />
+							<Stack.Screen name="AddPetLoading" component={AddPetLoading} options={{ headerShown: false }} />
 							<Stack.Screen name="Profile" component={Profile} options={{ headerShown: false }} />
 						</Stack.Navigator>
 					</AuthProvider>
