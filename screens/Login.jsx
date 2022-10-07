@@ -1,14 +1,16 @@
 import { SafeAreaView, StyleSheet, TouchableOpacity, View, Image } from 'react-native';
-import { Button, Text, TextInput, useTheme } from 'react-native-paper';
+import { Button, HelperText, Text, TextInput, useTheme } from 'react-native-paper';
 import { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { auth } from '../firebase-config';
+import { auth, fs } from '../firebase-config';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import Spinner from 'react-native-loading-spinner-overlay';
+import { doc, updateDoc } from 'firebase/firestore';
 
 const Login = () => {
 	const navigation = useNavigation();
 	const { colors } = useTheme();
+	const [error, setError] = useState(false);
 	const [showPw, setShowPw] = useState(false);
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
@@ -16,8 +18,16 @@ const Login = () => {
 
 	const handleSubmit = async () => {
 		setLoading(true);
-		if (email.trim() !== '' && password.trim() !== '') {
-			await signInWithEmailAndPassword(auth, email, password);
+		try {
+			if (email.trim() !== '' && password.trim() !== '') {
+				const { user } = await signInWithEmailAndPassword(auth, email, password);
+				await updateDoc(doc(fs, "users", user.uid), {
+					online: true
+				});
+			}
+		} catch (err) {
+			setError(true);
+			console.log(err);
 		}
 		setLoading(false);
 	}
@@ -40,12 +50,18 @@ const Login = () => {
 				<Text variant="bodyLarge" style={{ marginBottom: 8, color: colors.primary }}>Please sign in</Text>
 			</View>
 			<View>
+				{error && (
+					<HelperText type="error">
+						Invalid email or password
+					</HelperText>
+				)}
 				<TextInput
 					label="Email"
 					placeholder="Enter your email"
 					mode="outlined"
 					value={email}
 					onChangeText={handleEmailChange}
+					error={error}
 				/>
 				<TextInput
 					label="Password"
@@ -53,6 +69,7 @@ const Login = () => {
 					mode="outlined"
 					value={password}
 					onChangeText={handlePasswordChange}
+					error={error}
 					secureTextEntry={!showPw}
 					right={<TextInput.Icon icon={showPw ? "eye-off" : "eye"} onPress={() => setShowPw(pw => !pw)} />}
 				/>

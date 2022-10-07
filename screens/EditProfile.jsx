@@ -2,10 +2,10 @@ import { useNavigation } from '@react-navigation/native';
 import { useContext, useState } from 'react';
 import { SafeAreaView, ScrollView, StyleSheet, View } from 'react-native'
 import Spinner from 'react-native-loading-spinner-overlay';
-import { Appbar, Avatar, TextInput, TouchableRipple, useTheme } from 'react-native-paper';
+import { Appbar, Avatar, HelperText, TextInput, TouchableRipple, useTheme } from 'react-native-paper';
 import AuthContext from '../context/AuthContext'
 import * as ImagePicker from 'expo-image-picker';
-import { doc, serverTimestamp, setDoc } from 'firebase/firestore';
+import { doc, serverTimestamp, setDoc, updateDoc } from 'firebase/firestore';
 import { fs } from '../firebase-config';
 
 const EditProfile = () => {
@@ -19,7 +19,7 @@ const EditProfile = () => {
 	const [lastname, setLastname] = useState(user.lastname);
 
 	const handleImageChange = async () => {
-		let result = await ImagePicker.launchImageLibraryAsync({
+		const result = await ImagePicker.launchImageLibraryAsync({
 			mediaTypes: ImagePicker.MediaTypeOptions.Images,
 			allowsEditing: false,
 			aspect: [4, 3],
@@ -34,16 +34,16 @@ const EditProfile = () => {
 
 	const handleSubmit = async () => {
 		setSaving(true);
-		console.log(image);
-		const newUserDetails = {
-			...user,
-			photoURL: image,
-			firstname,
-			lastname,
-			updatedAt: serverTimestamp()
-		};
-		await setDoc(doc(fs, "users", user.uid), newUserDetails);
-		setUser(newUserDetails);
+		if (firstname !== "" || lastname !== "") {
+			const newUserDetails = {
+				photoURL: image,
+				firstname,
+				lastname,
+				updatedAt: serverTimestamp()
+			};
+			await updateDoc(doc(fs, "users", user.uid), newUserDetails);
+			setUser(newUserDetails);
+		}
 		setSaving(false);
 	}
 
@@ -68,20 +68,34 @@ const EditProfile = () => {
 					</View>
 				</View>
 				<View style={{ marginTop: 16, paddingHorizontal: 16 }}>
-					<TextInput
-						label="Firstname"
-						mode="outlined"
-						value={firstname}
-						onChangeText={(text) => setFirstname(text)}
-						style={{ marginVertical: 4 }}
-					/>
-					<TextInput
-						label="Lastname"
-						mode="outlined"
-						value={lastname}
-						onChangeText={(text) => setLastname(text)}
-						style={{ marginVertical: 4 }}
-					/>
+					<View style={{ marginVertical: 4 }}>
+						<TextInput
+							label="Firstname"
+							mode="outlined"
+							value={firstname}
+							onChangeText={(text) => setFirstname(text)}
+							error={!firstname}
+						/>
+						{!firstname && (
+							<HelperText type="error" visible={!firstname}>
+								First name must not be empty.
+							</HelperText>
+						)}
+					</View>
+					<View style={{ marginVertical: 4 }}>
+						<TextInput
+							label="Lastname"
+							mode="outlined"
+							value={lastname}
+							onChangeText={(text) => setLastname(text)}
+							error={!lastname}
+						/>
+						{!lastname && (
+							<HelperText type="error" visible={!lastname}>
+								Last name must not be empty.
+							</HelperText>
+						)}
+					</View>
 				</View>
 			</ScrollView>
 		</SafeAreaView>

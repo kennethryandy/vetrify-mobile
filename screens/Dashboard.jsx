@@ -2,19 +2,33 @@ import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Text, useTheme } from 'react-native-paper';
 import { signOut } from 'firebase/auth';
-import { auth } from '../firebase-config';
-import { useContext } from 'react';
+import { auth, fs } from '../firebase-config';
+import { useContext, useState } from 'react';
 import AuthContext from '../context/AuthContext';
 import AdminDashboard from '../components/AdminDashboard';
 import UserDashboard from '../components/UserDashboard';
 import Spinner from 'react-native-loading-spinner-overlay';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { doc, updateDoc } from 'firebase/firestore';
 
 const Dashboard = () => {
 	const { colors } = useTheme();
 	const { user, loading } = useContext(AuthContext);
-	const handleSignout = () => signOut(auth);
 
-	if (loading) {
+	const [logoutLoading, setLogoutLoading] = useState(false);
+
+	const handleSignout = async () => {
+		setLogoutLoading(true);
+		AsyncStorage.removeItem("admin");
+		AsyncStorage.removeItem("user");
+		await updateDoc(doc(fs, "users", user.uid), {
+			online: false
+		});
+		await signOut(auth);
+		setLogoutLoading(false);
+	};
+
+	if (loading || logoutLoading) {
 		return (
 			<Spinner visible={loading} color={colors.primary} />
 		)
@@ -26,7 +40,7 @@ const Dashboard = () => {
 				<Text variant="titleMedium">Home</Text>
 				<TouchableOpacity onPress={handleSignout} style={styles.logout}><Text variant="labelLarge">Logout</Text></TouchableOpacity>
 			</View>
-			{!user.role === 'admin' ? (
+			{!user?.role === 'admin' ? (
 				<AdminDashboard admin={user} />
 			) : (
 				<UserDashboard />

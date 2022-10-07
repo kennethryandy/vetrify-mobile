@@ -1,4 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
+import moment from 'moment';
 import { useContext } from 'react';
 import { SafeAreaView, ScrollView, StyleSheet, View } from 'react-native'
 import Spinner from 'react-native-loading-spinner-overlay';
@@ -39,7 +40,7 @@ const Profile = () => {
 						<List.Item title="Firstname" left={renderAccountIcon} description={user.firstname} />
 						<List.Item title="Lastname" left={renderAccountIcon} description={user.lastname} />
 						<List.Item title="Email" left={() => <List.Icon icon="email" />} description={user.email} />
-						<List.Item title="Date created" left={() => <List.Icon icon="calendar-account" />} description={user.createdAt.toDate().toLocaleDateString('en-US')} />
+						<List.Item title="Joined on" left={() => <List.Icon icon="calendar-account" />} description={moment(user.createdAt).format("MMMM DD, YYYY")} />
 					</List.Section>
 				</View>
 			</ScrollView>

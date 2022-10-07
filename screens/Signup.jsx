@@ -30,6 +30,8 @@ const Signup = () => {
 					lastname,
 					email,
 					role: 'user',
+					photoURL: "",
+					online: true,
 					createdAt: serverTimestamp(),
 					updatedAt: serverTimestamp()
 				});
