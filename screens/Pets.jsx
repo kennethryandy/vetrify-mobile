@@ -1,10 +1,10 @@
-import { FlatList, Touchable, TouchableOpacity, View } from 'react-native'
+import { FlatList, View } from 'react-native'
 import { MaterialIcons } from '@expo/vector-icons';
 import { Appbar, Avatar, Caption, Card, Paragraph, Text, Title, useTheme } from 'react-native-paper'
 import { useNavigation } from '@react-navigation/native'
-import { collection, orderBy, query } from 'firebase/firestore'
+import { collection, orderBy, query, where } from 'firebase/firestore'
 import { useCollection } from 'react-firebase-hooks/firestore'
-import { fs } from '../firebase-config'
+import { auth, fs } from '../firebase-config'
 import Spinner from 'react-native-loading-spinner-overlay'
 
 const Pets = () => {
@@ -12,9 +12,9 @@ const Pets = () => {
 	const navigation = useNavigation();
 
 	const petsRef = collection(fs, 'pets');
-	const petsQuery = query(petsRef, orderBy('createdAt'));
+	const petsQuery = query(petsRef, where("ownerId", "==", auth.currentUser.uid), orderBy('createdAt'));
 
-	const [pets, loading] = useCollection(petsQuery);
+	const [pets, loading, err] = useCollection(petsQuery);
 
 	const navigateToAddPets = () => {
 		navigation.navigate('AddPets');
