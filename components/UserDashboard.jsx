@@ -12,7 +12,7 @@ const UserDashboard = () => {
 	}
 
 	const navigateToAppointments = () => {
-		navigation.navigate('Appointments');
+		navigation.navigate('Appointment');
 	}
 
 	return (

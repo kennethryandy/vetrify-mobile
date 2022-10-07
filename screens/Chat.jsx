@@ -1,26 +1,28 @@
 import { FlatList, Image, StyleSheet, View } from 'react-native'
-import { addDoc, collection, getDocs, orderBy, query, serverTimestamp, where } from 'firebase/firestore';
+import { addDoc, collection, doc, documentId, orderBy, query, serverTimestamp, setDoc, where } from 'firebase/firestore';
 import { useCollection } from 'react-firebase-hooks/firestore';
 import { fs } from '../firebase-config';
-import { useContext, useEffect, useState } from 'react';
-import AuthContext from '../context/AuthContext';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useState } from 'react';
 import Spinner from 'react-native-loading-spinner-overlay';
-import { Avatar, Caption, Divider, Paragraph, Text, TextInput, useTheme } from 'react-native-paper';
+import { Avatar, Caption, Divider, IconButton, Paragraph, Text, TextInput, useTheme } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import moment from 'moment';
 import * as ImagePicker from 'expo-image-picker';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
 const Chat = () => {
+	const navigation = useNavigation();
 	const { colors } = useTheme();
-	const { user, loading, admin } = useContext(AuthContext);
+	const { params: { currentUser, selectedUser } } = useRoute();
 
 	const [sending, setSending] = useState(false);
 	const [messageText, setMessageText] = useState("");
 
+	const chatId = currentUser.uid > selectedUser.uid ? `${currentUser.uid}-${selectedUser.uid}` : `${selectedUser.uid}-${currentUser.uid}`;
+
 	const chatsRef = collection(fs, 'chats');
-	const chatsQuery = query(chatsRef, where("senderId", "in", [user.uid, admin.uid]), orderBy("createdAt"));
-	const [chats, chatLoading] = useCollection(chatsQuery);
+	const chatsQuery = query(chatsRef, where("chatId", "==", chatId), orderBy("createdAt"));
+	const [chats, chatLoading, err] = useCollection(chatsQuery);
 
 	const handleTextChange = (text) => {
 		setMessageText(text);
@@ -30,12 +32,13 @@ const Chat = () => {
 		setSending(true);
 		setMessageText("");
 		const messageDetails = {
-			senderId: user.uid,
-			senderName: user.firstname + " " + user.lastname,
-			senderPhotoURL: user.photoURL,
-			recipientId: admin.uid,
-			recipientName: admin.firstname + " " + admin.lastname,
-			recipientPhotoURL: admin.photoURL,
+			chatId,
+			senderId: currentUser.uid,
+			senderName: currentUser.firstname + " " + currentUser.lastname,
+			senderPhotoURL: currentUser.photoURL,
+			recipientId: selectedUser.uid,
+			recipientName: selectedUser.firstname + " " + selectedUser.lastname,
+			recipientPhotoURL: selectedUser.photoURL,
 			message: messageText,
 			messageType: "text",
 			createdAt: serverTimestamp()
@@ -57,12 +60,13 @@ const Chat = () => {
 			setSending(true);
 			setMessageText("");
 			const messageDetails = {
-				senderId: user.uid,
-				senderName: user.firstname + " " + user.lastname,
-				senderPhotoURL: user.photoURL,
-				recipientId: admin.uid,
-				recipientName: admin.firstname + " " + admin.lastname,
-				recipientPhotoURL: admin.photoURL,
+				chatId,
+				senderId: currentUser.uid,
+				senderName: currentUser.firstname + " " + currentUser.lastname,
+				senderPhotoURL: currentUser.photoURL,
+				recipientId: selectedUser.uid,
+				recipientName: selectedUser.firstname + " " + selectedUser.lastname,
+				recipientPhotoURL: selectedUser.photoURL,
 				message: `data:image/jpg;base64,${result.base64}`,
 				messageType: "image",
 				createdAt: serverTimestamp()
@@ -75,7 +79,7 @@ const Chat = () => {
 	const messagesKeyExtractor = (item) => item.id;
 
 	const messagesRenderItem = ({ item }) => (
-		item.data().senderId === user.uid ? (
+		item.data().senderId === currentUser.uid ? (
 			item.data().messageType === 'text' ? (
 				<View style={{ width: '100%', marginVertical: 4 }}>
 					<View style={{ alignSelf: "flex-end" }}>
@@ -122,20 +126,21 @@ const Chat = () => {
 		)
 	)
 
-	if (loading) {
-		return <Spinner visible={loading} color={colors.primary} />
-	}
-
 	return (
 		<SafeAreaView style={styles.container}>
-			{admin && (
+			{selectedUser && (
 				<View style={styles.header}>
-					{admin.photoURL ? (
-						<Avatar.Image source={{ uri: admin.photoURL }} size={40} />
+					<IconButton
+						icon="chevron-left"
+						size={24}
+						onPress={navigation.goBack}
+					/>
+					{selectedUser.photoURL ? (
+						<Avatar.Image source={{ uri: selectedUser.photoURL }} size={40} />
 					) : (
 						<Avatar.Icon icon="account" size={40} />
 					)}
-					<Text variant="labelLarge" style={{ marginLeft: 8 }}>Dr. {admin.firstname} {admin.lastname}</Text>
+					<Text variant="labelLarge" style={{ marginLeft: 8 }}>{selectedUser.firstname} {selectedUser.lastname}</Text>
 				</View>
 			)}
 			<Divider bold />
@@ -150,7 +155,7 @@ const Chat = () => {
 							data={chats?.docs || []}
 							keyExtractor={messagesKeyExtractor}
 							renderItem={messagesRenderItem}
-							contentContainerStyle={{ justifyContent: 'flex-start', flexGrow: 1, flexDirection: 'column-reverse' }}
+							contentContainerStyle={{ justifyContent: 'flex-end', flexGrow: 1, flexDirection: 'column-reverse' }}
 							style={{ flex: 1 }}
 							automaticallyAdjustContentInsets
 							inverted
@@ -180,7 +185,7 @@ const styles = StyleSheet.create({
 	header: {
 		flexDirection: 'row',
 		alignItems: 'center',
-		padding: 16
+		paddingVertical: 16
 	},
 	chatContainer: {
 		flex: 1,

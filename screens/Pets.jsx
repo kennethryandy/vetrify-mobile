@@ -14,7 +14,7 @@ const Pets = () => {
 	const petsRef = collection(fs, 'pets');
 	const petsQuery = query(petsRef, where("ownerId", "==", auth.currentUser.uid), orderBy('createdAt'));
 
-	const [pets, loading, err] = useCollection(petsQuery);
+	const [pets, loading] = useCollection(petsQuery);
 
 	const navigateToAddPets = () => {
 		navigation.navigate('AddPets');

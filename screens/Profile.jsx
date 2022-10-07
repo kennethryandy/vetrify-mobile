@@ -21,6 +21,8 @@ const Profile = () => {
 		return <Spinner visible={loading} color={colors.primary} />;
 	}
 
+	console.log(user.createdAt);
+
 	return (
 		<SafeAreaView style={styles.container}>
 			<ScrollView>
@@ -37,8 +39,8 @@ const Profile = () => {
 				<View>
 					<List.Section>
 						<List.Subheader>Profile Details</List.Subheader>
-						<List.Item title="Firstname" left={renderAccountIcon} description={user.firstname} />
-						<List.Item title="Lastname" left={renderAccountIcon} description={user.lastname} />
+						<List.Item title="First name" left={renderAccountIcon} description={user.firstname} />
+						<List.Item title="Last name" left={renderAccountIcon} description={user.lastname} />
 						<List.Item title="Email" left={() => <List.Icon icon="email" />} description={user.email} />
 						<List.Item title="Joined on" left={() => <List.Icon icon="calendar-account" />} description={moment(user.createdAt).format("MMMM DD, YYYY")} />
 					</List.Section>

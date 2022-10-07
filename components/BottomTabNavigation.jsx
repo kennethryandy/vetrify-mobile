@@ -7,6 +7,7 @@ import Profile from '../screens/Profile';
 import Pets from '../screens/Pets';
 import Chat from '../screens/Chat';
 import ChatList from '../screens/ChatList';
+import Appointment from '../screens/Appointment';
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -37,18 +38,11 @@ const BottomTabNavigation = () => {
 			})}
 		>
 			<Tab.Screen name="Dashboard" component={Dashboard} />
-			<Tab.Screen name="Appointment" component={DummyScreen} />
+			<Tab.Screen name="Appointment" component={Appointment} />
 			<Tab.Screen name="Pets" component={Pets} />
 			<Tab.Screen name="Profile" component={Profile} />
-			{/* <Tab.Screen name="ChatList" component={ChatList} /> */}
-			{/* <Tab.Screen name="ChatList" component={Chat} /> */}
+			<Tab.Screen name="ChatList" component={ChatList} />
 		</Tab.Navigator>
-	)
-}
-
-function DummyScreen () {
-	return (
-		<Text>Hello</Text>
 	)
 }
 

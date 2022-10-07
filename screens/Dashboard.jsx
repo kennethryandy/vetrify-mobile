@@ -1,6 +1,6 @@
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Text, useTheme } from 'react-native-paper';
+import { Divider, Text, useTheme } from 'react-native-paper';
 import { signOut } from 'firebase/auth';
 import { auth, fs } from '../firebase-config';
 import { useContext, useState } from 'react';
@@ -19,8 +19,6 @@ const Dashboard = () => {
 
 	const handleSignout = async () => {
 		setLogoutLoading(true);
-		AsyncStorage.removeItem("admin");
-		AsyncStorage.removeItem("user");
 		await updateDoc(doc(fs, "users", user.uid), {
 			online: false
 		});
@@ -30,9 +28,11 @@ const Dashboard = () => {
 
 	if (loading || logoutLoading) {
 		return (
-			<Spinner visible={loading} color={colors.primary} />
+			<Spinner visible={loading || logoutLoading} color={colors.primary} />
 		)
 	}
+
+	console.log(user);
 
 	return (
 		<SafeAreaView>
@@ -40,7 +40,8 @@ const Dashboard = () => {
 				<Text variant="titleMedium">Home</Text>
 				<TouchableOpacity onPress={handleSignout} style={styles.logout}><Text variant="labelLarge">Logout</Text></TouchableOpacity>
 			</View>
-			{!user?.role === 'admin' ? (
+			<Divider />
+			{user.role === 'admin' ? (
 				<AdminDashboard admin={user} />
 			) : (
 				<UserDashboard />

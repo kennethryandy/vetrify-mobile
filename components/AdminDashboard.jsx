@@ -1,17 +1,89 @@
 import { StyleSheet, View } from 'react-native'
-import React from 'react'
-import { Text } from 'react-native-paper'
+import { Surface, Text, TouchableRipple, useTheme } from 'react-native-paper'
+import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
+
 
 const AdminDashboard = ({ admin }) => {
+	const navigation = useNavigation();
+	const { colors } = useTheme();
+
+	const navigateToPets = () => {
+		navigation.navigate('Pets');
+	}
+
+	const navigateToAppointments = () => {
+		navigation.navigate('Appointment');
+	}
+
 	return (
 		<View>
-			<Text variant='titleLarge'>
-				Welcome back <Text style={{ color: colors.primary }}>{admin.lastname}</Text>
-			</Text>
+			<View style={{ marginBottom: 8 }}>
+				<Text variant='titleLarge'>
+					Welcome back <Text style={{ color: colors.primary }}>{admin.lastname}</Text>
+				</Text>
+			</View>
+
+			<View style={styles.cardNavigations}>
+				<Surface style={styles.cardSurface}>
+					<TouchableRipple onPress={navigateToPets}>
+						<View style={styles.cardNav}>
+							<MaterialIcons
+								name="pets"
+								size={28}
+								color={colors.primary}
+							/>
+							<Text variant="titleMedium" style={styles.cardText}>View Pets</Text>
+							<MaterialCommunityIcons
+								name="chevron-right"
+								size={28}
+							/>
+						</View>
+					</TouchableRipple>
+				</Surface>
+				<Surface style={styles.cardSurface}>
+					<TouchableRipple onPress={navigateToAppointments}>
+						<View style={styles.cardNav}>
+							<MaterialCommunityIcons
+								name="calendar-multiple-check"
+								size={28}
+								color={colors.secondary}
+							/>
+							<Text variant="titleMedium" style={styles.cardText}>Set Appointments</Text>
+							<MaterialCommunityIcons
+								name="chevron-right"
+								size={28}
+							/>
+						</View>
+					</TouchableRipple>
+				</Surface>
+			</View>
 		</View>
 	)
 }
 
 export default AdminDashboard
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+	cardNavigations: {
+		width: '100%',
+		marginVertical: 8
+	},
+	cardSurface: {
+		borderRadius: 8,
+		width: '100%',
+		overflow: 'hidden',
+		marginBottom: 8
+	},
+	cardNav: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		padding: 24,
+		borderRadius: 8,
+		width: '100%',
+	},
+	cardText: {
+		marginLeft: 16,
+		flex: 1
+	}
+})
