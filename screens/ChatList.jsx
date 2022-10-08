@@ -89,13 +89,13 @@ const ChatList = () => {
 			<Appbar.Header mode="center-aligned" style={{ backgroundColor: "transparent" }}>
 				<Appbar.BackAction onPress={navigation.goBack} />
 				<Appbar.Content title="Chats" titleStyle={{ fontWeight: 'bold' }} />
-				<View style={{ marginRight: 16 }}>
+				<TouchableRipple onPress={() => navigation.navigate("Profile")} style={{ marginRight: 16 }}>
 					{user.photoURL ? (
 						<Avatar.Image source={{ uri: user.photoURL }} size={40} />
 					) : (
 						<Avatar.Icon icon="account" size={40} />
 					)}
-				</View>
+				</TouchableRipple>
 			</Appbar.Header>
 			<View style={styles.listContainer}>
 				<Searchbar placeholder="Search" onChangeText={onChangeSearch} style={{ marginBottom: 8 }} />

@@ -2,7 +2,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useContext, useState } from 'react';
 import { SafeAreaView, ScrollView, StyleSheet, View } from 'react-native'
 import Spinner from 'react-native-loading-spinner-overlay';
-import { Appbar, Avatar, HelperText, IconButton, TextInput, TouchableRipple, useTheme } from 'react-native-paper';
+import { Appbar, Avatar, Button, HelperText, IconButton, TextInput, TouchableRipple, useTheme } from 'react-native-paper';
 import AuthContext from '../context/AuthContext'
 import * as ImagePicker from 'expo-image-picker';
 import { doc, serverTimestamp, setDoc } from 'firebase/firestore';
@@ -51,11 +51,11 @@ const EditProfile = () => {
 			<Appbar.Header>
 				<Appbar.BackAction onPress={navigation.goBack} />
 				<Appbar.Content title="Edit Profile" />
-				<Appbar.Action icon="content-save-outline" onPress={handleSubmit} iconColor={colors.primary} />
+				<Appbar.Action icon="content-save-outline" onPress={handleSubmit} iconColor={colors.success} />
 			</Appbar.Header>
 			<ScrollView>
 				<View style={[styles.profileHeader, { backgroundColor: colors.tertiary }]} >
-					<View style={{ width: 100, height: 100, alignItems: 'center', justifyContent: 'center', marginVertical: 25 }}>
+					<View style={{ width: 100, height: 100, alignItems: 'center', justifyContent: 'center', marginTop: 24 }}>
 						<TouchableRipple rippleColor={colors.tertiary} onPress={handleImageChange} style={styles.editProfilePic}>
 							<View>
 								{image ? (
@@ -63,16 +63,10 @@ const EditProfile = () => {
 								) : (
 									<Avatar.Icon icon="account" size={100} style={{ alignSelf: "center" }} />
 								)}
-								<IconButton
-									icon="pencil"
-									size={18}
-									onPress={handleImageChange}
-									style={styles.editProfilePicIcon}
-									iconColor={colors.lightgray}
-								/>
 							</View>
 						</TouchableRipple>
 					</View>
+					<Button onPress={handleImageChange} mode="contained" style={{ marginTop: 8, marginBottom: 16, backgroundColor: "#6eab4d" }}>Change Avatar</Button>
 				</View>
 				<View style={{ marginTop: 16, paddingHorizontal: 16 }}>
 					<View style={{ marginVertical: 4 }}>
@@ -125,11 +119,5 @@ const styles = StyleSheet.create({
 	editProfilePic: {
 		alignItems: 'center',
 		justifyContent: 'center',
-		position: 'relative',
-	},
-	editProfilePicIcon: {
-		position: 'absolute',
-		top: 0,
-		right: 0
 	}
 });
