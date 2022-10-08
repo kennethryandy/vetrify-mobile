@@ -29,22 +29,24 @@ const Chat = () => {
 	}
 
 	const handleSubmitChat = async () => {
-		setSending(true);
-		setMessageText("");
-		const messageDetails = {
-			chatId,
-			senderId: currentUser.uid,
-			senderName: currentUser.firstname + " " + currentUser.lastname,
-			senderPhotoURL: currentUser.photoURL,
-			recipientId: selectedUser.uid,
-			recipientName: selectedUser.firstname + " " + selectedUser.lastname,
-			recipientPhotoURL: selectedUser.photoURL,
-			message: messageText,
-			messageType: "text",
-			createdAt: serverTimestamp()
-		};
-		await addDoc(chatsRef, messageDetails);
-		setSending(false);
+		if (messageText.trim() !== '') {
+			setSending(true);
+			setMessageText("");
+			const messageDetails = {
+				chatId,
+				senderId: currentUser.uid,
+				senderName: currentUser.firstname + " " + currentUser.lastname,
+				senderPhotoURL: currentUser.photoURL,
+				recipientId: selectedUser.uid,
+				recipientName: selectedUser.firstname + " " + selectedUser.lastname,
+				recipientPhotoURL: selectedUser.photoURL,
+				message: messageText,
+				messageType: "text",
+				createdAt: serverTimestamp()
+			};
+			await addDoc(chatsRef, messageDetails);
+			setSending(false);
+		}
 	}
 
 	const handleImageSend = async () => {
