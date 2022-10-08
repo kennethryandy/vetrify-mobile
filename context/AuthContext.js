@@ -32,7 +32,7 @@ export function AuthProvider ({ children, authUser }) {
 				});
 			}
 		});
-	}, []);
+	}, [authUser]);
 
 	const updateUser = (updatedUser) => {
 		setLoading(true);

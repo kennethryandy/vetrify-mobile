@@ -6,6 +6,7 @@ import { auth, fs } from '../firebase-config';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { setDoc, serverTimestamp, doc } from 'firebase/firestore';
 import Spinner from 'react-native-loading-spinner-overlay';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Email regular expression for validating email address
 const EMAIL_REGEX =
@@ -46,7 +47,7 @@ const Signup = () => {
 			try {
 				const { user } = await createUserWithEmailAndPassword(auth, email, password);
 				if (user) {
-					await setDoc(doc(fs, "users", user.uid), {
+					const newUser = {
 						firstname,
 						lastname,
 						email,
@@ -55,7 +56,9 @@ const Signup = () => {
 						online: true,
 						createdAt: serverTimestamp(),
 						updatedAt: serverTimestamp()
-					});
+					}
+					await setDoc(doc(fs, "users", user.uid), newUser);
+					AsyncStorage.setItem("user", JSON.stringify({ ...newUser, uid: user.uid }))
 				}
 			} catch (err) {
 				console.log(err);

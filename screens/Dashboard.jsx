@@ -23,17 +23,16 @@ const Dashboard = () => {
 		await updateDoc(doc(fs, "users", user.uid), {
 			online: false
 		});
+		AsyncStorage.removeItem("users");
 		await signOut(auth);
 		setLogoutLoading(false);
 	};
 
-	if (loading || logoutLoading) {
+	if (loading || logoutLoading || !user) {
 		return (
-			<Spinner visible={loading || logoutLoading} color={colors.primary} />
+			<Spinner visible={loading || logoutLoading || !user} color={colors.primary} />
 		)
 	}
-
-	console.log(user);
 
 	return (
 		<SafeAreaView>
