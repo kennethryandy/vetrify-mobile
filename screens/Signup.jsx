@@ -58,7 +58,7 @@ const Signup = () => {
 						updatedAt: serverTimestamp()
 					}
 					await setDoc(doc(fs, "users", user.uid), newUser);
-					AsyncStorage.setItem("user", JSON.stringify({ ...newUser, uid: user.uid }))
+					AsyncStorage.setItem("user", JSON.stringify({ ...newUser, uid: user.uid, createdAt: newUser.createdAt.toDate() }))
 				}
 			} catch (err) {
 				console.log(err);
