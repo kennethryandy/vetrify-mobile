@@ -15,6 +15,7 @@ const BottomTabNavigation = () => {
 	const { colors } = useTheme();
 
 	return (
+		// Bottom tab bar navigation screens
 		<Tab.Navigator
 			activeColor={colors.primary}
 			inactiveColor={colors.secondary}

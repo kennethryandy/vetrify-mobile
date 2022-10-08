@@ -12,22 +12,24 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 
 const Chat = () => {
 	const navigation = useNavigation();
-	const { colors } = useTheme();
 	const { params: { currentUser, selectedUser } } = useRoute();
 
 	const [sending, setSending] = useState(false);
 	const [messageText, setMessageText] = useState("");
 
+	// Initialize the chat id base on the current user id + the selected user id.
 	const chatId = currentUser.uid > selectedUser.uid ? `${currentUser.uid}-${selectedUser.uid}` : `${selectedUser.uid}-${currentUser.uid}`;
 
+	// Get all the conversations on both users base on the chat id
 	const chatsRef = collection(fs, 'chats');
 	const chatsQuery = query(chatsRef, where("chatId", "==", chatId), orderBy("createdAt"));
-	const [chats, chatLoading, err] = useCollection(chatsQuery);
+	const [chats, chatLoading] = useCollection(chatsQuery);
 
 	const handleTextChange = (text) => {
 		setMessageText(text);
 	}
 
+	// When send icon is clicked, save the message to the firebase database
 	const handleSubmitChat = async () => {
 		if (messageText.trim() !== '') {
 			setSending(true);
@@ -49,6 +51,7 @@ const Chat = () => {
 		}
 	}
 
+	// When gallery icon is clicked, open the gallery and if the user selects an image save to the firebase database
 	const handleImageSend = async () => {
 		const result = await ImagePicker.launchImageLibraryAsync({
 			mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -80,6 +83,7 @@ const Chat = () => {
 
 	const messagesKeyExtractor = (item) => item.id;
 
+	// Loops through all the image and display accordingly.
 	const messagesRenderItem = ({ item }) => (
 		item.data().senderId === currentUser.uid ? (
 			item.data().messageType === 'text' ? (

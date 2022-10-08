@@ -16,6 +16,8 @@ const ChatList = () => {
 	const [users, setUsers] = useState([]);
 	const [data, setData] = useState([]);
 	const navigation = useNavigation();
+
+	// select the users collection on the firebase database
 	const usersRef = collection(fs, "users");
 
 	useEffect(() => {
@@ -30,6 +32,7 @@ const ChatList = () => {
 				queryUser = query(usersRef, where(documentId(), "!=", user.uid), where("role", "==", "admin"));
 			}
 
+			// Get all users base on query
 			onSnapshot(queryUser, (snapshot) => {
 				let usersTmp = [];
 				snapshot.forEach((doc) => {
@@ -60,6 +63,7 @@ const ChatList = () => {
 
 	const usersKeyExtractor = (item) => item.uid;
 
+	// Loop and display all users
 	const usersRenderItem = ({ item }) => (
 		<TouchableRipple onPress={() =>
 			navigation.navigate("Chat", { currentUser: user, selectedUser: item })}

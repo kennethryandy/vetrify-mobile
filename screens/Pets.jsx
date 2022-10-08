@@ -11,17 +11,19 @@ const Pets = () => {
 	const { colors } = useTheme();
 	const navigation = useNavigation();
 
+	// Get all pets base where the ownerId of the pet is equal to the userId of the of the user
 	const petsRef = collection(fs, 'pets');
 	const petsQuery = query(petsRef, where("ownerId", "==", auth.currentUser.uid), orderBy('createdAt'));
-
 	const [pets, loading] = useCollection(petsQuery);
 
+	// If add icon is clicked, redirect to addPets screen
 	const navigateToAddPets = () => {
 		navigation.navigate('AddPets');
 	}
 
 	const petsKeyExtractor = (item) => item.id;
 
+	// Loops through the pets and display
 	const petsRenderItem = ({ item }) => {
 		let statusColor = colors.success;
 		switch (item.data().animalStatus) {

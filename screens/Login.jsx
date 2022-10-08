@@ -16,22 +16,26 @@ const Login = () => {
 	const [password, setPassword] = useState("");
 	const [loading, setLoading] = useState(false);
 
+	// When login button is clicked
 	const handleSubmit = async () => {
 		setLoading(true);
 		try {
 			if (email.trim() !== '' && password.trim() !== '') {
+				// If email and password are not empty login using firebase and update the user online column to true.
 				const { user } = await signInWithEmailAndPassword(auth, email, password);
 				await updateDoc(doc(fs, "users", user.uid), {
 					online: true
 				});
 			}
 		} catch (err) {
+			// If an error occurred
 			setError(true);
 			console.log(err);
 		}
 		setLoading(false);
 	}
 
+	// Redirect to the signup screen
 	const redirectSignUp = () => {
 		navigation.navigate("Signup");
 	}

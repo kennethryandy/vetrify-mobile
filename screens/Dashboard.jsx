@@ -17,6 +17,7 @@ const Dashboard = () => {
 
 	const [logoutLoading, setLogoutLoading] = useState(false);
 
+	// update the online column of the user to offline and sign out the user.
 	const handleSignout = async () => {
 		setLogoutLoading(true);
 		await updateDoc(doc(fs, "users", user.uid), {
@@ -42,6 +43,7 @@ const Dashboard = () => {
 			</View>
 			<Divider />
 			{user.role === 'admin' ? (
+				// If user is admin display the admin dashboard
 				<AdminDashboard admin={user} />
 			) : (
 				<UserDashboard />

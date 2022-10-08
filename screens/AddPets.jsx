@@ -29,10 +29,13 @@ const AddPets = () => {
 		setDescription(text);
 	}
 
+	// When save icon is clicked
 	const handleSubmit = async () => {
 		if (petNickname === '') {
+			// Set error if pet nickname is empty
 			setError(true);
 		} else {
+			// Add pet to the firebase database
 			const petDetailsToBeAdded = {
 				nickname: petNickname,
 				ownerId: user.uid,

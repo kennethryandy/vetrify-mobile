@@ -1,11 +1,15 @@
 import { StyleSheet, TouchableOpacity, View, Image, ScrollView } from 'react-native';
-import { Button, Text, TextInput, useTheme } from 'react-native-paper';
+import { Button, HelperText, Text, TextInput, useTheme } from 'react-native-paper';
 import { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { auth, fs } from '../firebase-config';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { setDoc, serverTimestamp, doc } from 'firebase/firestore';
 import Spinner from 'react-native-loading-spinner-overlay';
+
+// Email regular expression for validating email address
+const EMAIL_REGEX =
+	/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 
 const Signup = () => {
 	const navigation = useNavigation();
@@ -19,33 +23,66 @@ const Signup = () => {
 	const [confirmpassword, setConfirmassword] = useState("");
 	const [loading, setLoading] = useState(false);
 
+	// Error states
+	const [errorPasswordNotMatch, setErrorPasswordNotMatch] = useState(false);
+	const [emailError, setEmailError] = useState(false);
+
+	// When signup button is clicked
 	const handleSubmit = async () => {
-		if (password !== confirmpassword) return;
+		// If password and confirm password does not match, set errorPasswordNotMatch to be true and exit.
+		if (password !== confirmpassword) {
+			setErrorPasswordNotMatch(true);
+			return;
+		};
+		// If email is not a valid email address, set emailError to be true and exit.
+		if (!EMAIL_REGEX.test(email)) {
+			setEmailError(true);
+			return;
+		};
+
+		// If first name and last name are not empty, save the user to firebase and update online column to true and role to "user".
 		setLoading(true);
-		if (email.trim() !== '' && password.trim() !== '' && firstname.trim() !== '' && lastname.trim() !== '') {
-			const { user } = await createUserWithEmailAndPassword(auth, email, password);
-			if (user) {
-				await setDoc(doc(fs, "users", user.uid), {
-					firstname,
-					lastname,
-					email,
-					role: 'user',
-					photoURL: "",
-					online: true,
-					createdAt: serverTimestamp(),
-					updatedAt: serverTimestamp()
-				});
+		if (firstname.trim() !== '' && lastname.trim() !== '') {
+			try {
+				const { user } = await createUserWithEmailAndPassword(auth, email, password);
+				if (user) {
+					await setDoc(doc(fs, "users", user.uid), {
+						firstname,
+						lastname,
+						email,
+						role: 'user',
+						photoURL: "",
+						online: true,
+						createdAt: serverTimestamp(),
+						updatedAt: serverTimestamp()
+					});
+				}
+			} catch (err) {
+				console.log(err);
+				setEmailError(true);
+				setLoading(false);
 			}
 		}
 		setLoading(false);
 	}
 
+	// Redirect to login screen
 	const redirectLogin = () => {
 		navigation.navigate("Login");
 	}
 
-	const handleEmailChange = (text) => setEmail(text);
-	const handlePasswordChange = (text) => setPassword(text);
+	const handleEmailChange = (text) => {
+		if (emailError) {
+			setEmailError(false);
+		}
+		setEmail(text);
+	}
+	const handlePasswordChange = (text) => {
+		if (errorPasswordNotMatch) {
+			setErrorPasswordNotMatch(false);
+		}
+		setPassword(text);
+	}
 	const handleConfirmpasswordChange = (text) => setConfirmassword(text);
 	const handleFirstnameChange = (text) => setFirstname(text);
 	const handleLastnameChange = (text) => setLastname(text);
@@ -81,7 +118,13 @@ const Signup = () => {
 					mode="outlined"
 					value={email}
 					onChangeText={handleEmailChange}
+					error={emailError}
 				/>
+				{emailError && (
+					<HelperText type="error">
+						Invalid email address.
+					</HelperText>
+				)}
 				<TextInput
 					label="Password"
 					placeholder="Enter your password"
@@ -90,6 +133,7 @@ const Signup = () => {
 					onChangeText={handlePasswordChange}
 					secureTextEntry={!showPw}
 					right={<TextInput.Icon icon={showPw ? "eye-off" : "eye"} onPress={() => setShowPw(pw => !pw)} />}
+					error={errorPasswordNotMatch}
 				/>
 				<TextInput
 					label="Confirm Password"
@@ -99,7 +143,13 @@ const Signup = () => {
 					onChangeText={handleConfirmpasswordChange}
 					secureTextEntry={!showConfirmpw}
 					right={<TextInput.Icon icon={showConfirmpw ? "eye-off" : "eye"} onPress={() => setShowConfirmpw(pw => !pw)} />}
+					error={errorPasswordNotMatch}
 				/>
+				{errorPasswordNotMatch && (
+					<HelperText type="error">
+						Password and confirm password does not match.
+					</HelperText>
+				)}
 			</View>
 			<View style={styles.btnContainer}>
 				<Button style={styles.btn} mode="contained" disabled={loading} onPress={handleSubmit} icon="login" >Sign Up</Button>

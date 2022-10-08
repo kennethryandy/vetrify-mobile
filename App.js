@@ -18,6 +18,7 @@ import Chat from './screens/Chat';
 
 const Stack = createStackNavigator();
 
+// react native paper theme para nindot ang UI, naa dre ang color palette
 const paperTheme = {
 	...DefaultTheme,
 	colors: {
@@ -44,11 +45,13 @@ export default function App () {
 			<StatusBar />
 			<NavigationContainer>
 				{!user && !loading ? (
+					// If no logged in user, only login and signup screen are available
 					<Stack.Navigator>
 						<Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
 						<Stack.Screen name="Signup" component={Signup} options={{ headerShown: false }} />
 					</Stack.Navigator>
 				) : (
+					// If user is logged in all the screens below will be available
 					<AuthProvider authUser={user}>
 						<Stack.Navigator>
 							<Stack.Screen name="BottomTabNavigation" component={BottomTabNavigation} options={{ headerShown: false }} />

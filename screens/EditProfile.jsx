@@ -17,6 +17,7 @@ const EditProfile = () => {
 	const [firstname, setFirstname] = useState(user.firstname);
 	const [lastname, setLastname] = useState(user.lastname);
 
+	// When the avatar or change avatar button is clicked, open the gallery.
 	const handleImageChange = async () => {
 		const result = await ImagePicker.launchImageLibraryAsync({
 			mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -27,12 +28,16 @@ const EditProfile = () => {
 		});
 
 		if (!result.cancelled) {
+			// if they select an image and not close the gallery, save the image in the "image" state or variable
 			setImage(`data:image/jpg;base64,${result.base64}`);
 		}
 	}
 
+	// When save icon is clicked
 	const handleSubmit = async () => {
 		if (firstname !== "" || lastname !== "") {
+			// If first name and last name is not empty
+			// Save the updated user details to the firebase database base on the user id
 			const newUserDetails = {
 				...user,
 				photoURL: image,
