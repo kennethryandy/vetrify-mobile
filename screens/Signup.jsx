@@ -44,27 +44,27 @@ const Signup = () => {
 		// If first name and last name are not empty, save the user to firebase and update online column to true and role to "user".
 		setLoading(true);
 		if (firstname.trim() !== '' && lastname.trim() !== '') {
-			try {
-				const { user } = await createUserWithEmailAndPassword(auth, email, password);
-				if (user) {
-					const newUser = {
-						firstname,
-						lastname,
-						email,
-						role: 'user',
-						photoURL: "",
-						online: true,
-						createdAt: serverTimestamp(),
-						updatedAt: serverTimestamp()
+			createUserWithEmailAndPassword(auth, email, password)
+				.then(async ({ user }) => {
+					if (user) {
+						const newUser = {
+							firstname,
+							lastname,
+							email,
+							role: 'user',
+							photoURL: "",
+							online: true,
+							createdAt: serverTimestamp(),
+							updatedAt: serverTimestamp()
+						}
+						await setDoc(doc(fs, "users", user.uid), newUser);
+						setLoading(false);
 					}
-					await setDoc(doc(fs, "users", user.uid), newUser);
-					AsyncStorage.setItem("user", JSON.stringify({ ...newUser, uid: user.uid, createdAt: newUser.createdAt.toDate() }))
-				}
-			} catch (err) {
-				console.log(err);
-				setEmailError(true);
-				setLoading(false);
-			}
+				}).catch((err) => {
+					console.log(err);
+					setEmailError(true);
+					setLoading(false);
+				});
 		}
 		setLoading(false);
 	}

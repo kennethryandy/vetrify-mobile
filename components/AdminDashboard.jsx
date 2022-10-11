@@ -17,7 +17,7 @@ const AdminDashboard = ({ admin }) => {
 	}
 
 	return (
-		<View>
+		<View style={{ marginTop: 24, paddingHorizontal: 16 }}>
 			<View style={{ marginBottom: 8 }}>
 				<Text variant='titleLarge'>
 					Welcome back <Text style={{ color: colors.primary }}>{admin.lastname}</Text>

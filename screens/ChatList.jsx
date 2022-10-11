@@ -33,7 +33,7 @@ const ChatList = () => {
 			}
 
 			// Get all users base on query
-			onSnapshot(queryUser, (snapshot) => {
+			const unsubscribe = onSnapshot(queryUser, (snapshot) => {
 				let usersTmp = [];
 				snapshot.forEach((doc) => {
 					const userDetails = {
@@ -44,7 +44,9 @@ const ChatList = () => {
 				});
 				setUsers(usersTmp);
 				setData(usersTmp);
+				setLoadingUsers(false);
 			});
+			return () => unsubscribe();
 		}
 		setLoadingUsers(false);
 	}, [user]);

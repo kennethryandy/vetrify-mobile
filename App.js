@@ -36,6 +36,7 @@ const paperTheme = {
 export default function App () {
 	const [user, loading] = useAuthState(auth);
 
+
 	if (loading) {
 		return <Spinner visible={loading} color={DefaultTheme.colors.primary} />;
 	}

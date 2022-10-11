@@ -8,7 +8,6 @@ import AuthContext from '../context/AuthContext';
 import AdminDashboard from '../components/AdminDashboard';
 import UserDashboard from '../components/UserDashboard';
 import Spinner from 'react-native-loading-spinner-overlay';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { doc, updateDoc } from 'firebase/firestore';
 
 const Dashboard = () => {
@@ -23,7 +22,6 @@ const Dashboard = () => {
 		await updateDoc(doc(fs, "users", user.uid), {
 			online: false
 		});
-		AsyncStorage.removeItem("users");
 		await signOut(auth);
 		setLogoutLoading(false);
 	};

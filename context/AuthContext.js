@@ -1,4 +1,3 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { doc, getDoc } from "firebase/firestore";
 import { createContext, useEffect, useState } from "react";
 import { fs } from "../firebase-config";
@@ -12,36 +11,23 @@ export function AuthProvider ({ children, authUser }) {
 	const userCollectionRef = doc(fs, 'users', authUser.uid);
 
 	useEffect(() => {
-		AsyncStorage.getItem("user", function (_err, result) {
-			if (result) {
-				setUser(JSON.parse(result));
-				setLoading(false);
-			} else {
-				getDoc(userCollectionRef).then((doc) => {
-					if (doc.exists()) {
-						setUser({
-							...doc.data(),
-							createdAt: doc.data().createdAt.toDate(),
-							uid: authUser.uid
-						});
-					}
-					setLoading(false);
-				}).catch((err) => {
-					console.error(err);
-					setLoading(false);
+		getDoc(userCollectionRef).then((doc) => {
+			if (doc.exists()) {
+				setUser({
+					...doc.data(),
+					uid: authUser.uid,
+					createdAt: doc.data().createdAt.toDate()
 				});
 			}
+			setLoading(false);
+		}).catch((err) => {
+			console.error(err);
+			setLoading(false);
 		});
-	}, [authUser]);
-
-	const updateUser = (updatedUser) => {
-		setLoading(true);
-		setUser({ ...user, ...updatedUser });
-		setLoading(false);
-	}
+	}, []);
 
 	return (
-		<AuthContext.Provider value={{ user, loading, updateUser }}>
+		<AuthContext.Provider value={{ user, loading }}>
 			{children}
 		</AuthContext.Provider>
 	)

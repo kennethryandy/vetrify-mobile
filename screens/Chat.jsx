@@ -19,6 +19,7 @@ const Chat = () => {
 
 	// Initialize the chat id base on the current user id + the selected user id.
 	const chatId = currentUser.uid > selectedUser.uid ? `${currentUser.uid}-${selectedUser.uid}` : `${selectedUser.uid}-${currentUser.uid}`;
+	console.log(chatId);
 
 	// Get all the conversations on both users base on the chat id
 	const chatsRef = collection(fs, 'chats');
