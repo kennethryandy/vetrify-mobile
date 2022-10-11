@@ -15,6 +15,9 @@ import AddPets from './screens/AddPets';
 import AddPetLoading from './components/AddPetLoading';
 import EditProfile from './screens/EditProfile';
 import Chat from './screens/Chat';
+import SetAppointments from './screens/SetAppointments';
+import AddAppointmentLoading from './components/AddAppointmentLoading';
+import ChatList from './screens/ChatList';
 
 const Stack = createStackNavigator();
 
@@ -29,7 +32,8 @@ const paperTheme = {
 		lightgray: "#FEFAEC",
 		success: "#28a745",
 		warning: "#ffc107",
-		info: "#17a2b8"
+		info: "#17a2b8",
+		muted: "#6c757d"
 	}
 }
 
@@ -62,6 +66,9 @@ export default function App () {
 							<Stack.Screen name="Profile" component={Profile} options={{ headerShown: false }} />
 							<Stack.Screen name="EditProfile" component={EditProfile} options={{ headerShown: false }} />
 							<Stack.Screen name="Chat" component={Chat} options={{ headerShown: false }} />
+							<Stack.Screen name="ChatList" component={ChatList} options={{ headerShown: false }} />
+							<Stack.Screen name="SetAppointments" component={SetAppointments} options={{ headerShown: false }} />
+							<Stack.Screen name="AddAppointmentLoading" component={AddAppointmentLoading} options={{ headerShown: false }} />
 						</Stack.Navigator>
 					</AuthProvider>
 				)}

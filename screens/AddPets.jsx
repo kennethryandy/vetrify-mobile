@@ -4,7 +4,7 @@ import AuthContext from '../context/AuthContext';
 import { Appbar, Chip, Divider, HelperText, SegmentedButtons, Text, TextInput, useTheme } from 'react-native-paper'
 import { useNavigation } from '@react-navigation/native'
 import { serverTimestamp } from 'firebase/firestore'
-import Spinner from 'react-native-loading-spinner-overlay/lib';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 const AddPets = () => {
 	const { user, loading } = useContext(AuthContext);
@@ -13,7 +13,6 @@ const AddPets = () => {
 
 	const [petNickname, setPetNickname] = useState('');
 	const [animalType, setAnimalType] = useState('Dog');
-	const [animalStatus, setAnimalStatus] = useState('Sick');
 	const [animalGender, setAnimalGender] = useState('Male');
 	const [description, setDescription] = useState('');
 	const [error, setError] = useState(false);
@@ -40,8 +39,8 @@ const AddPets = () => {
 				nickname: petNickname,
 				ownerId: user.uid,
 				animalType,
-				animalStatus,
 				description,
+				status: "Not Checked",
 				createdAt: serverTimestamp()
 			};
 			// Navigate to AddPetLoading and insert the pet.
@@ -130,32 +129,6 @@ const AddPets = () => {
 								value: 'Not sure',
 								label: 'Not sure',
 								style: { backgroundColor: animalGender === "Not sure" ? colors.secondary : "transparent" }
-							},
-						]}
-						style={styles.group}
-					/>
-				</View>
-				<Divider style={{ marginVertical: 8 }} bold />
-				<Text style={{ marginBottom: 4 }} variant="labelLarge">Select your current Pet status</Text>
-				<View>
-					<SegmentedButtons
-						value={animalStatus}
-						onValueChange={setAnimalStatus}
-						buttons={[
-							{
-								value: 'Sick',
-								label: 'Sick',
-								style: { backgroundColor: animalStatus === "Sick" ? colors.secondary : "transparent" }
-							},
-							{
-								value: 'Healthy',
-								label: 'Healthy',
-								style: { backgroundColor: animalStatus === "Healthy" ? colors.secondary : "transparent" }
-							},
-							{
-								value: 'Not sure',
-								label: 'Not sure',
-								style: { backgroundColor: animalStatus === "Not sure" ? colors.secondary : "transparent" }
 							},
 						]}
 						style={styles.group}

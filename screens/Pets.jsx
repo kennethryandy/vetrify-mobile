@@ -30,8 +30,8 @@ const Pets = () => {
 			case "Sick":
 				statusColor = colors.error;
 				break;
-			case "Not sure":
-				statusColor = colors.info;
+			case "Not Checked":
+				statusColor = colors.muted;
 		}
 		return (
 			<Card elevation={2} style={{ marginVertical: 6, padding: 6 }}>

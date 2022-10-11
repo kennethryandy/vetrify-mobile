@@ -16,7 +16,7 @@ export function AuthProvider ({ children, authUser }) {
 				setUser({
 					...doc.data(),
 					uid: authUser.uid,
-					createdAt: doc.data().createdAt.toDate()
+					createdAt: doc.data()?.createdAt ? doc.data().createdAt.toDate() : new Date()
 				});
 			}
 			setLoading(false);
@@ -24,7 +24,7 @@ export function AuthProvider ({ children, authUser }) {
 			console.error(err);
 			setLoading(false);
 		});
-	}, []);
+	}, [authUser]);
 
 	return (
 		<AuthContext.Provider value={{ user, loading }}>
