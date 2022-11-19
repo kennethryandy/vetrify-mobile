@@ -1,21 +1,27 @@
 import { useNavigation } from '@react-navigation/native';
 import { useContext, useState } from 'react';
-import { SafeAreaView, ScrollView, StyleSheet, View } from 'react-native'
+import { SafeAreaView, ScrollView, StyleSheet, View, TouchableOpacity } from 'react-native'
 import Spinner from 'react-native-loading-spinner-overlay';
-import { Appbar, Avatar, Button, HelperText, IconButton, TextInput, TouchableRipple, useTheme } from 'react-native-paper';
+import { Appbar, Avatar, Button, HelperText, Paragraph, RadioButton, TextInput, TouchableRipple, useTheme } from 'react-native-paper';
 import AuthContext from '../context/AuthContext'
 import * as ImagePicker from 'expo-image-picker';
+import { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { doc, serverTimestamp, setDoc } from 'firebase/firestore';
 import { fs } from '../firebase-config';
+import moment from 'moment';
 
 const EditProfile = () => {
 	const navigation = useNavigation();
 	const { colors } = useTheme();
 	const { user, loading, updateUser } = useContext(AuthContext);
 
+	const [loadingUpdate, setLoadingUpdate] = useState(false);
 	const [image, setImage] = useState(user.photoURL || "");
 	const [firstname, setFirstname] = useState(user.firstname);
 	const [lastname, setLastname] = useState(user.lastname);
+	const [gender, setGender] = useState(user?.gender || "Male");
+	const [date, setDate] = useState(user?.birthDate || null);
 
 	// When the avatar or change avatar button is clicked, open the gallery.
 	const handleImageChange = async () => {
@@ -33,8 +39,25 @@ const EditProfile = () => {
 		}
 	}
 
+	const onChange = (event, selectedDate) => {
+		const currentDate = selectedDate;
+		setDate(currentDate);
+	};
+
+	const showDatepicker = () => {
+		DateTimePickerAndroid.open({
+			value: date ? date : new Date(moment().subtract(9, 'years').format()),
+			onChange,
+			mode: "date",
+			is24Hour: true,
+			maximumDate: new Date(moment().subtract(9, 'years').format()),
+
+		});
+	};
+
 	// When save icon is clicked
 	const handleSubmit = async () => {
+		setLoadingUpdate(true);
 		if (firstname !== "" || lastname !== "") {
 			// If first name and last name is not empty
 			// Save the updated user details to the firebase database base on the user id
@@ -43,16 +66,19 @@ const EditProfile = () => {
 				photoURL: image,
 				firstname,
 				lastname,
+				gender,
+				birthDate: date,
 				updatedAt: serverTimestamp()
 			};
 			await setDoc(doc(fs, "users", user.uid), newUserDetails);
 			updateUser(newUserDetails);
 		}
+		setLoadingUpdate(false);
 	}
 
 	return (
 		<SafeAreaView style={styles.container}>
-			<Spinner visible={loading} />
+			<Spinner visible={loading || loadingUpdate} color={colors.primary} />
 			<Appbar.Header>
 				<Appbar.BackAction onPress={navigation.goBack} />
 				<Appbar.Content title="Edit Profile" />
@@ -101,6 +127,36 @@ const EditProfile = () => {
 								Last name must not be empty.
 							</HelperText>
 						)}
+					</View>
+					<View style={{ marginVertical: 8 }}>
+						<Paragraph style={{ marginLeft: 8, marginVertical: 4 }}>Select Birth Date</Paragraph>
+						<TouchableOpacity style={{ flexDirection: "row", alignItems: "center" }} onPress={showDatepicker}>
+							<MaterialCommunityIcons name="calendar" size={18} color={colors.primary} />
+							<Paragraph style={{ color: colors.primary, marginLeft: 8 }}>
+								{date ? moment(date).format("LL") : "Date of Birth"}
+							</Paragraph>
+						</TouchableOpacity>
+					</View>
+					<View style={{ marginVertical: 4 }}>
+						<Paragraph style={{ marginLeft: 8, marginVertical: 4 }}>Select Gender</Paragraph>
+						<View style={{ flexDirection: "row" }}>
+							<View style={{ flexDirection: "row", alignItems: "center" }}>
+								<RadioButton
+									value="Male"
+									status={gender === 'Male' ? 'checked' : 'unchecked'}
+									onPress={() => setGender('Male')}
+								/>
+								<Paragraph>Male</Paragraph>
+							</View>
+							<View style={{ flexDirection: "row", alignItems: "center" }}>
+								<RadioButton
+									value="Female"
+									status={gender === 'Female' ? 'checked' : 'unchecked'}
+									onPress={() => setGender('Female')}
+								/>
+								<Paragraph>Female</Paragraph>
+							</View>
+						</View>
 					</View>
 				</View>
 			</ScrollView>
