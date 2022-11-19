@@ -2196,6 +2196,13 @@
     prompts "^2.4.0"
     semver "^6.3.0"
 
+"@react-native-community/datetimepicker@^6.7.0":
+  version "6.7.0"
+  resolved "https://registry.yarnpkg.com/@react-native-community/datetimepicker/-/datetimepicker-6.7.0.tgz#c03bef0b07a6734bb8e603b78407e8281a4bfc8a"
+  integrity sha512-R8WA1nv6j2Q54+QFNkhzUzkOcN5lrtOCPyker272e8PopduAiirDMgu9hxNnfxd6NuB4n0VbRbRc7yl0O1V72Q==
+  dependencies:
+    invariant "^2.2.4"
+
 "@react-native/assets@1.0.0":
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@react-native/assets/-/assets-1.0.0.tgz#c6f9bf63d274bafc8e970628de24986b30a55c8e"
@@ -9163,6 +9170,11 @@ react-native-loading-spinner-overlay@^3.0.1:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/react-native-loading-spinner-overlay/-/react-native-loading-spinner-overlay-3.0.1.tgz#092481b8cce157d3af5ef942f845ad981f96bd36"
   integrity sha512-4GdR54HQnKg2HPSSisVizfTLuyhSh4splY9eb8mKiYF1Ihjn/5EmdNo5bN3S7uKPFRC3WLzIZIouX6G6fXfnjw==
+
+react-native-paper-select@^0.3.8:
+  version "0.3.8"
+  resolved "https://registry.yarnpkg.com/react-native-paper-select/-/react-native-paper-select-0.3.8.tgz#ccc9363ab92a287f7e993edf26d7b7f000f3a35d"
+  integrity sha512-qWu5xudEha8HhsSJU1G8YWMoqoRyjUgfXUCyeU4YSmoE+jLijf396CKUikPkcy9C9kxOpXRb5LjvC3iEHaxLbg==
 
 react-native-paper@5.0.0-rc.6:
   version "5.0.0-rc.6"

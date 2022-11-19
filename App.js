@@ -15,7 +15,7 @@ import AddPets from './screens/AddPets';
 import AddPetLoading from './components/AddPetLoading';
 import EditProfile from './screens/EditProfile';
 import Chat from './screens/Chat';
-import SetAppointments from './screens/SetAppointments';
+import SetAppointments from './screens/Appointments/SetAppointments';
 import AddAppointmentLoading from './components/AddAppointmentLoading';
 import ChatList from './screens/ChatList';
 
@@ -60,7 +60,7 @@ export default function App () {
 					<AuthProvider authUser={user}>
 						<Stack.Navigator>
 							<Stack.Screen name="BottomTabNavigation" component={BottomTabNavigation} options={{ headerShown: false }} />
-							<Stack.Screen name="Dashboard" component={Dashboard} options={{ headerShown: false }} />
+							<Stack.Screen name="Home" component={Dashboard} options={{ headerShown: false }} />
 							<Stack.Screen name="AddPets" component={AddPets} options={{ headerShown: false }} />
 							<Stack.Screen name="AddPetLoading" component={AddPetLoading} options={{ headerShown: false }} />
 							<Stack.Screen name="Profile" component={Profile} options={{ headerShown: false }} />

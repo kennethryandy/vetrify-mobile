@@ -1,4 +1,3 @@
-import { View, Text } from 'react-native';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import { MaterialCommunityIcons, MaterialIcons } from 'react-native-vector-icons';
 import Dashboard from '../screens/Dashboard';
@@ -6,7 +5,7 @@ import { useTheme } from 'react-native-paper';
 import Profile from '../screens/Profile';
 import Pets from '../screens/Pets';
 import ChatList from '../screens/ChatList';
-import Appointment from '../screens/Appointment';
+import AppointmentScreen from '../screens/Appointments/AppointmentScreen';
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -37,7 +36,7 @@ const BottomTabNavigation = () => {
 				}
 			})}
 		>
-			<Tab.Screen name="Appointment" component={Appointment} />
+			<Tab.Screen name="Appointment" component={AppointmentScreen} />
 			<Tab.Screen name="Pets" component={Pets} />
 			<Tab.Screen name="Home" component={Dashboard} />
 			<Tab.Screen name="Profile" component={Profile} />

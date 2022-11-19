@@ -1,20 +1,15 @@
 import { FlatList, View } from 'react-native'
-import { MaterialIcons } from '@expo/vector-icons';
-import { Appbar, Avatar, Caption, Card, Paragraph, Text, Title, useTheme } from 'react-native-paper'
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { Appbar, Avatar, Caption, Card, Paragraph, Text, Title, TouchableRipple, useTheme } from 'react-native-paper'
 import { useNavigation } from '@react-navigation/native'
-import { collection, orderBy, query, where } from 'firebase/firestore'
-import { useCollection } from 'react-firebase-hooks/firestore'
-import { auth, fs } from '../firebase-config'
 import Spinner from 'react-native-loading-spinner-overlay'
+import { useContext } from 'react';
+import AuthContext from '../context/AuthContext';
 
 const Pets = () => {
+	const { pets, loadingPets } = useContext(AuthContext);
 	const { colors } = useTheme();
 	const navigation = useNavigation();
-
-	// Get all pets base where the ownerId of the pet is equal to the userId of the of the user
-	const petsRef = collection(fs, 'pets');
-	const petsQuery = query(petsRef, where("ownerId", "==", auth.currentUser.uid), orderBy('createdAt'));
-	const [pets, loading] = useCollection(petsQuery);
 
 	// If add icon is clicked, redirect to addPets screen
 	const navigateToAddPets = () => {
@@ -25,42 +20,60 @@ const Pets = () => {
 
 	// Loops through the pets and display
 	const petsRenderItem = ({ item }) => {
-		let statusColor = colors.success;
-		switch (item.data().animalStatus) {
-			case "Sick":
-				statusColor = colors.error;
+		let genderIcon = "gender-male-female";
+		switch (item.data()?.gender) {
+			case "Male":
+				genderIcon = "gender-male";
 				break;
-			case "Not Checked":
-				statusColor = colors.muted;
+			case "Female":
+				genderIcon = "gender-female";
+			default:
+				break;
 		}
 		return (
-			<Card elevation={2} style={{ marginVertical: 6, padding: 6 }}>
-				<Card.Title
-					title={<Title style={{ fontWeight: 'bold', textTransform: 'uppercase' }}>{item.data().nickname}</Title>}
-					subtitle={<Caption style={{ fontWeight: "bold", color: "#5C797C" }}>{item.data().animalType}</Caption>}
-					left={(props) => <Avatar.Icon {...props} icon="paw" />}
-					right={(props) => (
-						<View style={{ alignItems: "center", marginRight: 8 }}>
-							<Caption style={{ fontWeight: "bold" }}>Status</Caption>
-							<MaterialIcons name="stop-circle" {...props} size={16} color={statusColor} />
-							<Text variant="labelSmall">{item.data().animalStatus}</Text>
-						</View>
-					)}
-				/>
-				{item.data()?.description && (
-					<Card.Content>
-						<View>
-							<Text variant="labelMedium">Pet description:</Text>
-							<Paragraph>{item.data().description}</Paragraph>
-						</View>
-					</Card.Content>
-				)}
+			<Card elevation={2} style={{ marginVertical: 6, }}>
+				<TouchableRipple onPress={() => { }} style={{ padding: 6 }}>
+					<View>
+						<Card.Title
+							title={
+								<View style={{ flexDirection: "row", alignItems: "center" }}>
+									<Text variant="titleMedium" style={{ fontWeight: 'bold', textTransform: 'capitalize', marginRight: 4, marginBottom: -8 }}>{item.data().nickname}</Text>
+									<MaterialCommunityIcons name={genderIcon} size={16} color={colors.primary} />
+								</View>
+							}
+							subtitle={
+								<Caption style={{ fontWeight: "bold", color: "#5C797C", textTransform: "capitalize" }}>{item.data().breed} - {item.data().animalType}</Caption>
+							}
+							left={(props) => (
+								item.data().petProfilePic ? (
+									<Avatar.Image {...props} source={{ uri: item.data().petProfilePic }} />
+								) : (
+									<Avatar.Icon {...props} icon="paw" />
+								)
+							)}
+							right={() => (
+								<View style={{ alignItems: "center", marginRight: 8 }}>
+									<Caption style={{ fontWeight: "bold" }}>Status</Caption>
+									<Text variant="labelSmall">{item.data().status}</Text>
+								</View>
+							)}
+						/>
+						{item.data()?.description && (
+							<Card.Content>
+								<View>
+									<Text variant="labelMedium">Pet description:</Text>
+									<Paragraph>{item.data().description}</Paragraph>
+								</View>
+							</Card.Content>
+						)}
+					</View>
+				</TouchableRipple>
 			</Card>
 		)
 	}
 
-	if (loading) {
-		return <Spinner visible={loading} color={colors.primary} />
+	if (loadingPets) {
+		return <Spinner visible={true} color={colors.primary} />
 	}
 
 	return (
