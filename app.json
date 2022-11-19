@@ -1,5 +1,6 @@
 {
   "expo": {
+		"owner": "michaeljan",
     "name": "vetrify",
     "slug": "vetrify",
     "version": "1.0.0",
