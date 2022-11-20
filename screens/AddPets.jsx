@@ -1,4 +1,5 @@
-import { ScrollView, StyleSheet, View } from 'react-native'
+import _ from 'lodash';
+import { ScrollView, StyleSheet, View } from 'react-native';
 import { useContext, useState } from 'react';
 import AuthContext from '../context/AuthContext';
 import { Appbar, Avatar, Button, Chip, Divider, HelperText, SegmentedButtons, Text, TextInput, TouchableRipple, useTheme } from 'react-native-paper'
@@ -8,6 +9,8 @@ import { serverTimestamp } from 'firebase/firestore'
 import Spinner from 'react-native-loading-spinner-overlay';
 import SingleSelect from '../components/SingleSelect';
 import * as ImagePicker from 'expo-image-picker';
+import { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
+import moment from 'moment';
 
 const petBreeds = petsWithBreeds.reduce((acc, curr) => {
 	if (curr.type in acc) {
@@ -30,18 +33,28 @@ const AddPets = () => {
 	const navigation = useNavigation();
 
 	const [image, setImage] = useState("");
+	const [date, setDate] = useState(moment().subtract(1, "day").toDate());
 	const [petNickname, setPetNickname] = useState('');
 	const [animalType, setAnimalType] = useState('dog');
 	const [breed, setBreed] = useState({});
 	const [animalGender, setAnimalGender] = useState('Male');
+	const [weight, setWeight] = useState("");
 	const [description, setDescription] = useState('');
 	const [error, setError] = useState(false);
+	const [errorWeight, setErrorWeight] = useState(false);
 
 	const handleTextChange = (text) => {
 		if (error) {
 			setError(false);
 		}
 		setPetNickname(text);
+	}
+
+	const handleWeightChange = (text) => {
+		if (errorWeight) {
+			setErrorWeight(false);
+		}
+		setWeight(text.replace(/[^0-9]/g, ''));
 	}
 
 	const handleDescriptionChange = (text) => {
@@ -66,21 +79,40 @@ const AddPets = () => {
 		}
 	}
 
+	const onChange = (_event, selectedDate) => {
+		const currentDate = selectedDate;
+		setDate(currentDate);
+	};
+
+	const showDatepicker = () => {
+		DateTimePickerAndroid.open({
+			value: date,
+			onChange,
+			mode: "date",
+			is24Hour: true,
+			maximumDate: moment().subtract(1, "day").toDate()
+		});
+	};
+
 	// When save icon is clicked
 	const handleSubmit = async () => {
 		if (petNickname === '') {
 			// Set error if pet nickname is empty
 			setError(true);
+		} else if (weight === "") {
+			setErrorWeight(true);
 		} else {
 			// Add pet to the firebase database
 			const petDetailsToBeAdded = {
-				nickname: petNickname,
+				nickname: _.capitalize(petNickname),
 				petProfilePic: image,
 				ownerId: user.uid,
 				animalType,
-				breed: breed.text,
+				breed: breed?.text ? _.capitalize(breed?.text) : "other",
 				description,
 				gender: animalGender,
+				weight,
+				birthDate: date,
 				status: "Not Checked",
 				createdAt: serverTimestamp()
 			};
@@ -182,6 +214,19 @@ const AddPets = () => {
 							]}
 							style={styles.group}
 						/>
+					</View>
+					<Divider style={{ marginVertical: 8 }} bold />
+					<Text style={{ marginBottom: 4 }} variant="labelLarge">Birth Date</Text>
+					<Button onPress={showDatepicker}>{moment(date).format("LL")}</Button>
+					<Divider style={{ marginVertical: 8 }} bold />
+					<View style={{ marginTop: 8 }}>
+						<Text style={{ marginBottom: 4 }} variant="labelLarge">Pet's weight</Text>
+						<TextInput error={errorWeight} mode="outlined" value={weight} label="Weight" placeholder="Weight" onChangeText={handleWeightChange} />
+						{errorWeight && (
+							<HelperText type="error">
+								Please provide pet's weight.
+							</HelperText>
+						)}
 					</View>
 					<Divider style={{ marginVertical: 8 }} bold />
 					<Text style={{ marginBottom: 4 }} variant="labelLarge">Pet's description</Text>

@@ -32,7 +32,7 @@ const Pets = () => {
 		}
 		return (
 			<Card elevation={2} style={{ marginVertical: 6, }}>
-				<TouchableRipple onPress={() => { }} style={{ padding: 6 }}>
+				<TouchableRipple onPress={() => navigation.navigate("PetProfile", { pet: { ...item.data(), id: item.id } })} style={{ padding: 6 }}>
 					<View>
 						<Card.Title
 							title={
@@ -77,14 +77,14 @@ const Pets = () => {
 	}
 
 	return (
-		<View>
+		<View style={{ flex: 1 }}>
 			<Appbar.Header mode='center-aligned' style={{ backgroundColor: "transparent", marginBottom: 16 }}>
 				<Appbar.BackAction onPress={navigation.goBack} />
 				<Appbar.Content title="Pets" titleStyle={{ fontWeight: 'bold' }} />
 				<Appbar.Action icon="plus" onPress={navigateToAddPets} />
 			</Appbar.Header>
 			{pets.docs.length > 0 ? (
-				<View style={{ paddingHorizontal: 16 }}>
+				<View style={{ paddingHorizontal: 16, flex: 1 }}>
 					<FlatList
 						data={pets.docs}
 						keyExtractor={petsKeyExtractor}

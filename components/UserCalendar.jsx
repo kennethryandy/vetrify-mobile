@@ -1,6 +1,7 @@
-import { StyleSheet, View } from 'react-native'
+import { Image, StyleSheet, View } from 'react-native'
 import { useContext, useMemo, useState } from 'react';
-import { Button, Text, TextInput, TouchableRipple, useTheme } from 'react-native-paper'
+import { Button, Chip, Text, TextInput, TouchableRipple, useTheme } from 'react-native-paper'
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { CalendarList } from 'react-native-calendars';
 import moment from 'moment';
@@ -20,10 +21,18 @@ const times = [
 	["5:00 PM", "7:00 PM"]
 ];
 
+const purposes = [
+	"Groom",
+	"Checkup",
+	"Vaccine"
+];
+
 const UserCalendar = () => {
 
-	const { user } = useContext(AuthContext);
+	const { user, pets } = useContext(AuthContext);
 	const { colors } = useTheme();
+	const [selectedPets, setSelectedPet] = useState([]);
+	const [purpose, setPurpose] = useState("");
 	const [day, setDay] = useState(today);
 	const [selectedTime, setSelectedTime] = useState(null);
 	const [description, setDescription] = useState("");
@@ -64,11 +73,25 @@ const UserCalendar = () => {
 		setDay(day.dateString);
 	}
 
+	const handleSelectedPets = (id) => {
+		const isSelected = selectedPets.findIndex(p => p === id);
+		if (isSelected !== -1) {
+			const newSelected = selectedPets.filter(p => p !== id);
+			setSelectedPet(newSelected);
+		} else {
+			setSelectedPet(curr => ([
+				...curr,
+				id
+			]));
+		}
+	}
+
 	const handleDescriptionChange = (text) => {
 		setDescription(text);
 	}
 
 	const handleSubmit = async () => {
+		if (purpose === "" || selectedPets.length === 0 || !selectedTime) return;
 		const data = {
 			userId: user.uid,
 			photoURL: user.photoURL,
@@ -77,6 +100,8 @@ const UserCalendar = () => {
 			fullname: user.firstname + " " + user.lastname,
 			day,
 			time: selectedTime[0] + " - " + selectedTime[1],
+			petIds: selectedPets,
+			purpose,
 			description,
 			createdAt: serverTimestamp(),
 			status: 'Pending'
@@ -91,7 +116,7 @@ const UserCalendar = () => {
 	return (
 		<>
 			<View style={styles.header}>
-				<Text variant="titleLarge">Select Date</Text>
+				<Text variant="titleMedium">Select Date</Text>
 			</View>
 			<CalendarList
 				horizontal={true}
@@ -108,7 +133,7 @@ const UserCalendar = () => {
 				}}
 			/>
 			<View style={styles.header}>
-				<Text variant="titleLarge">Select Time</Text>
+				<Text variant="titleMedium">Select Time</Text>
 			</View>
 			<View style={styles.timeContainer}>
 				{times.map((time, idx) => {
@@ -124,8 +149,57 @@ const UserCalendar = () => {
 					)
 				})}
 			</View>
+
 			<View style={styles.header}>
-				<Text variant="titleLarge">Description</Text>
+				<Text variant="titleMedium">Select your Pet(s)</Text>
+			</View>
+			<View style={styles.chipContainer}>
+				{pets.docs.map(doc => {
+					const isSelected = selectedPets.findIndex(p => p === doc.id);
+					return (
+						<Chip
+							key={doc.id}
+							style={styles.chip}
+							onPress={() => handleSelectedPets(doc.id)}
+							mode="outlined"
+							showSelectedOverlay
+							avatar={
+								doc.data()?.petProfilePic ? (
+									<Image source={{ uri: doc.data().petProfilePic }} />
+								) : (
+									<MaterialCommunityIcons name="paw" size={24} />
+								)
+							}
+							selected={isSelected !== -1}
+							textStyle={{ textTransform: "capitalize" }}
+						>
+							{doc.data().nickname}
+						</Chip>
+					)
+				})}
+			</View>
+
+			<View style={styles.header}>
+				<Text variant="titleMedium">Purpose</Text>
+			</View>
+			<View style={styles.chipContainer}>
+				{purposes.map((p, idx) => (
+					<Chip
+						key={idx}
+						style={styles.chip}
+						onPress={() => setPurpose(p)}
+						mode="outlined"
+						showSelectedOverlay
+						selected={purpose === p}
+						textStyle={{ textTransform: "capitalize" }}
+					>
+						{p}
+					</Chip>
+				))}
+			</View>
+
+			<View style={styles.header}>
+				<Text variant="titleMedium">Description</Text>
 			</View>
 			<View style={{ paddingHorizontal: 16 }}>
 				<TextInput mode="outlined" multiline value={description} label="Description (Optional)" placeholder="Enter description of your appointment." onChangeText={handleDescriptionChange} numberOfLines={3} />
@@ -168,5 +242,16 @@ const styles = StyleSheet.create({
 	submitBtn: {
 		paddingHorizontal: 16,
 		marginVertical: 16
-	}
+	},
+	chipContainer: {
+		flexDirection: 'row',
+		justifyContent: 'center',
+		flexWrap: 'wrap',
+		width: "100%",
+		paddingHorizontal: 16
+	},
+	chip: {
+		margin: 4,
+		minWidth: 80
+	},
 });

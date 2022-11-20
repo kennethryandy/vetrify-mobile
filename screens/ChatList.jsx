@@ -127,6 +127,7 @@ export default ChatList
 const styles = StyleSheet.create({
 	listContainer: {
 		padding: 12,
+		flex: 1,
 	},
 	loadingChatList: {
 		alignItems: 'center',

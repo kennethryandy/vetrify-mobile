@@ -1,6 +1,6 @@
 import { Appbar } from 'react-native-paper'
 import { ScrollView } from 'react-native-gesture-handler';
-import UserCalendar from '../components/UserCalendar';
+import UserCalendar from '../../components/UserCalendar';
 import { useNavigation } from '@react-navigation/native';
 
 const SetAppointments = () => {

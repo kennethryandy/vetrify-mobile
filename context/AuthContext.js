@@ -20,8 +20,9 @@ export function AuthProvider ({ children, authUser }) {
 	const petsQuery = query(petsRef, where("ownerId", "==", authUser.uid), orderBy('createdAt'));
 	const [pets, loadingPets] = useCollection(petsQuery);
 
-	// const appointmentsColRef = collection(fs, 'appointments');
-	// const appointmentsQuery = query(appointmentsColRef, where("userId", "==", authUser.uid), where("status", "!=", "Deleted"), orderBy('status'), orderBy('createdAt', 'desc'));
+	const appointmentsColRef = collection(fs, 'appointments');
+	const appointmentsQuery = query(appointmentsColRef, where("userId", "==", authUser.uid), where("status", "!=", "Deleted"), orderBy('status'), orderBy('createdAt', 'desc'));
+	const [appointments, loadingAppointment] = useCollection(appointmentsQuery);
 
 	useEffect(() => {
 		getDoc(userCollectionRef).then((doc) => {
@@ -41,7 +42,7 @@ export function AuthProvider ({ children, authUser }) {
 	}, [authUser]);
 
 	return (
-		<AuthContext.Provider value={{ user, loading, updateUser, pets, loadingPets }}>
+		<AuthContext.Provider value={{ user, loading, updateUser, pets, loadingPets, appointments, loadingAppointment }}>
 			{children}
 		</AuthContext.Provider>
 	)
