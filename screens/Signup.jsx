@@ -1,5 +1,6 @@
 import { StyleSheet, TouchableOpacity, View, Image, ScrollView } from 'react-native';
 import { Button, HelperText, Paragraph, RadioButton, Text, TextInput, useTheme } from 'react-native-paper';
+import _ from 'lodash';
 import { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { auth, fs } from '../firebase-config';
@@ -51,8 +52,8 @@ const Signup = () => {
 				.then(async ({ user }) => {
 					if (user) {
 						const newUser = {
-							firstname,
-							lastname,
+							firstname: _.capitalize(firstname),
+							lastname: _.capitalize(lastname),
 							email,
 							role: 'user',
 							photoURL: "",

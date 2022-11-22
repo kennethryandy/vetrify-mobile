@@ -19,6 +19,8 @@ import SetAppointments from './screens/Appointments/SetAppointments';
 import AddAppointmentLoading from './components/AddAppointmentLoading';
 import ChatList from './screens/ChatList';
 import PetProfile from './screens/PetProfile';
+import EditPetProfile from './screens/EditPetProfile';
+import UserProfile from './screens/Admin/UserProfile';
 
 const Stack = createStackNavigator();
 
@@ -65,7 +67,9 @@ export default function App () {
 							<Stack.Screen name="AddPets" component={AddPets} options={{ headerShown: false }} />
 							<Stack.Screen name="AddPetLoading" component={AddPetLoading} options={{ headerShown: false }} />
 							<Stack.Screen name="PetProfile" component={PetProfile} options={{ headerShown: false }} />
+							<Stack.Screen name="EditPetProfile" component={EditPetProfile} options={{ headerShown: false }} />
 							<Stack.Screen name="Profile" component={Profile} options={{ headerShown: false }} />
+							<Stack.Screen name="UserProfile" component={UserProfile} options={{ headerShown: false }} />
 							<Stack.Screen name="EditProfile" component={EditProfile} options={{ headerShown: false }} />
 							<Stack.Screen name="Chat" component={Chat} options={{ headerShown: false }} />
 							<Stack.Screen name="ChatList" component={ChatList} options={{ headerShown: false }} />

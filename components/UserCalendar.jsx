@@ -46,7 +46,7 @@ const UserCalendar = () => {
 
 	const appointmentsMarks = useMemo(() => {
 		if (appointments?.docs.length > 0) {
-			return appointments?.docs.reduce((acc, doc) => {
+			return appointments?.docs.filter(apt => apt.status !== "Cancelled").reduce((acc, doc) => {
 				let statusColor = '#50cebb';
 				switch (doc.data().status) {
 					case "Pending":
@@ -61,7 +61,7 @@ const UserCalendar = () => {
 					default:
 						break;
 				}
-				acc[doc.data().day] = { selected: true, marked: true, selectedColor: statusColor, disabled: true, disableTouchEvent: true };
+				acc[doc.data().day] = { selected: true, marked: true, selectedColor: statusColor };
 				return acc;
 			}, {});
 		}

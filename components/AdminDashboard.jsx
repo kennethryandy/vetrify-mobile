@@ -1,89 +1,64 @@
-import { StyleSheet, View } from 'react-native'
-import { Surface, Text, TouchableRipple, useTheme } from 'react-native-paper'
-import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
+import { ScrollView, View } from 'react-native'
+import { Button, Divider, Text, useTheme } from 'react-native-paper'
 import { useNavigation } from '@react-navigation/native';
-
+import AppointmentCard from './AppointmentCard';
+import PetCard from './PetCard';
+import Spinner from 'react-native-loading-spinner-overlay';
+import { useContext } from 'react';
+import AdminContext from '../context/AdminContext';
+import UserCard from './UserCard';
 
 const AdminDashboard = ({ admin }) => {
+	const { users, appointments, loadingUsers, loadingAppointment } = useContext(AdminContext);
 	const navigation = useNavigation();
 	const { colors } = useTheme();
 
-	const navigateToPets = () => {
-		navigation.navigate('Pets');
-	}
-
-	const navigateToAppointments = () => {
-		navigation.navigate('Appointment');
+	if (loadingUsers || loadingAppointment) {
+		return <Spinner visible colors={colors.primary} />
 	}
 
 	return (
-		<View style={{ marginTop: 24, paddingHorizontal: 16 }}>
+		<ScrollView style={{ marginTop: 24, paddingHorizontal: 16, flex: 1 }}>
 			<View style={{ marginBottom: 8 }}>
 				<Text variant='titleLarge'>
 					Welcome back <Text style={{ color: colors.primary }}>{admin.lastname}</Text>
 				</Text>
 			</View>
 
-			<View style={styles.cardNavigations}>
-				<Surface style={styles.cardSurface}>
-					<TouchableRipple onPress={navigateToPets}>
-						<View style={styles.cardNav}>
-							<MaterialIcons
-								name="pets"
-								size={28}
-								color={colors.primary}
-							/>
-							<Text variant="titleMedium" style={styles.cardText}>View Pets</Text>
-							<MaterialCommunityIcons
-								name="chevron-right"
-								size={28}
-							/>
+			<View style={{ marginVertical: 16 }}>
+				{users.length > 0 && (
+					<>
+						<View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
+							<Text variant='titleMedium'>
+								Recent Joined Users
+							</Text>
+							<Button icon="chevron-right" contentStyle={{ flexDirection: "row-reverse" }} compact mode="text" labelStyle={{ paddingRight: 4 }} onPress={() => navigation.navigate("Users")}>
+								View All
+							</Button>
 						</View>
-					</TouchableRipple>
-				</Surface>
-				<Surface style={styles.cardSurface}>
-					<TouchableRipple onPress={navigateToAppointments}>
-						<View style={styles.cardNav}>
-							<MaterialCommunityIcons
-								name="calendar-multiple-check"
-								size={28}
-								color={colors.secondary}
-							/>
-							<Text variant="titleMedium" style={styles.cardText}>Set Appointments</Text>
-							<MaterialCommunityIcons
-								name="chevron-right"
-								size={28}
-							/>
-						</View>
-					</TouchableRipple>
-				</Surface>
+						<Divider bold style={{ marginTop: 4, marginBottom: 8 }} />
+						{users.slice(0, 3).map((user, idx) => <UserCard key={idx} user={user} />)}
+					</>
+				)}
 			</View>
-		</View>
+
+			{appointments.filter(apt => apt.status === "Pending").length > 0 && (
+				<View style={{ marginVertical: 16 }}>
+					<View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
+						<Text variant='titleMedium'>
+							Pending Appointments
+						</Text>
+						<Button icon="chevron-right" contentStyle={{ flexDirection: "row-reverse" }} compact mode="text" labelStyle={{ paddingRight: 4 }} onPress={() => navigation.navigate("Appointment")}>
+							View All
+						</Button>
+					</View>
+					<Divider bold style={{ marginBottom: 8 }} />
+					{appointments.filter(apt => apt.status === "Pending").map(apt => <AppointmentCard key={apt.id} appointment={apt} deletable={false} />)}
+				</View>
+			)}
+
+		</ScrollView>
 	)
 }
 
 export default AdminDashboard
-
-const styles = StyleSheet.create({
-	cardNavigations: {
-		width: '100%',
-		marginVertical: 8
-	},
-	cardSurface: {
-		borderRadius: 8,
-		width: '100%',
-		overflow: 'hidden',
-		marginBottom: 8
-	},
-	cardNav: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		padding: 24,
-		borderRadius: 8,
-		width: '100%',
-	},
-	cardText: {
-		marginLeft: 16,
-		flex: 1
-	}
-})

@@ -18,7 +18,7 @@ const PetProfile = ({ route, navigation }) => {
 	const [medicalRecords, loadingRecords] = useCollection(medRecordQuery);
 
 	const editProfileHandler = () => {
-		// navigation.navigate('EditProfile');
+		navigation.navigate('EditPetProfile', { pet });
 	}
 
 	if (loadingRecords) {

@@ -6,11 +6,20 @@ import Profile from '../screens/Profile';
 import Pets from '../screens/Pets';
 import ChatList from '../screens/ChatList';
 import AppointmentScreen from '../screens/Appointments/AppointmentScreen';
+import { useContext } from 'react';
+import AuthContext from '../context/AuthContext';
+import Users from '../screens/Admin/Users';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 const Tab = createMaterialBottomTabNavigator();
 
 const BottomTabNavigation = () => {
+	const { user, loading } = useContext(AuthContext);
 	const { colors } = useTheme();
+
+	if (loading) {
+		return <Spinner visible color={colors.primary} />
+	}
 
 	return (
 		// Bottom tab bar navigation screens
@@ -31,15 +40,21 @@ const BottomTabNavigation = () => {
 						iconName = focused ? 'chat' : 'chat-outline';
 					} else if (route.name === 'Pets') {
 						iconName = focused ? 'dog' : 'dog';
+					} else if (route.name === 'Users') {
+						iconName = focused ? 'account-supervisor' : 'account-supervisor-outline';
 					}
 					return <MaterialCommunityIcons name={iconName} color={color} size={24} />
 				}
 			})}
 		>
 			<Tab.Screen name="Appointment" component={AppointmentScreen} />
-			<Tab.Screen name="Pets" component={Pets} />
+			{user.role === "admin" ? (
+				<Tab.Screen name="Users" component={Users} />
+			) : (
+				<Tab.Screen name="Pets" component={Pets} />
+			)}
 			<Tab.Screen name="Home" component={Dashboard} />
-			<Tab.Screen name="Profile" component={Profile} />
+			<Tab.Screen name="Profile" component={Profile} initialParams={null} />
 			<Tab.Screen name="ChatList" component={ChatList} />
 		</Tab.Navigator>
 	)

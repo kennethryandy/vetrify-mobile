@@ -27,19 +27,31 @@ const petBreeds = petsWithBreeds.reduce((acc, curr) => {
 	return acc;
 }, {});
 
-const AddPets = () => {
+
+const EditPetProfile = ({ route }) => {
+	const { pet } = route.params;
 	const { user, loading } = useContext(AuthContext);
 	const { colors } = useTheme();
 	const navigation = useNavigation();
 
-	const [image, setImage] = useState("");
-	const [date, setDate] = useState(moment().subtract(1, "day").toDate());
-	const [petNickname, setPetNickname] = useState('');
-	const [animalType, setAnimalType] = useState('dog');
-	const [breed, setBreed] = useState({});
-	const [animalGender, setAnimalGender] = useState('Male');
-	const [weight, setWeight] = useState("");
-	const [description, setDescription] = useState('');
+	const [image, setImage] = useState(pet?.petProfilePic || null);
+	const [date, setDate] = useState(pet?.birthDate?.toDate() || moment().subtract(1, "day").toDate());
+	const [petNickname, setPetNickname] = useState(pet?.nickname);
+	const [animalType, setAnimalType] = useState(pet.animalType);
+	const [petStatus, setPetStatus] = useState(pet.status);
+	const [breed, setBreed] = useState(() => {
+		const selected = petBreeds[pet.animalType].find(p => p.value === pet.breed);
+		return {
+			text: pet.breed,
+			selectedList: [{
+				_id: selected.id,
+				value: selected.value
+			}]
+		}
+	});
+	const [animalGender, setAnimalGender] = useState(pet.gender || "Not sure");
+	const [weight, setWeight] = useState(pet.weight || "");
+	const [description, setDescription] = useState(pet?.description || "");
 	const [error, setError] = useState(false);
 	const [errorWeight, setErrorWeight] = useState(false);
 
@@ -102,8 +114,8 @@ const AddPets = () => {
 		} else if (weight === "") {
 			setErrorWeight(true);
 		} else {
-			// Add pet to the firebase database
-			const petDetailsToBeAdded = {
+			const newPetDetails = {
+				...pet,
 				nickname: _.capitalize(petNickname),
 				petProfilePic: image,
 				ownerId: user.uid,
@@ -113,11 +125,11 @@ const AddPets = () => {
 				gender: animalGender,
 				weight,
 				birthDate: date,
-				status: "Not Checked",
-				createdAt: serverTimestamp()
-			};
+				status: petStatus,
+				updatedAt: serverTimestamp()
+			}
 			// Navigate to AddPetLoading and insert the pet.
-			navigation.navigate('AddPetLoading', { addPet: true, pet: petDetailsToBeAdded });
+			navigation.navigate('AddPetLoading', { updatePet: true, pet: newPetDetails });
 		}
 	}
 
@@ -128,9 +140,9 @@ const AddPets = () => {
 	return (
 		<View style={{ flex: 1, marginBottom: 8 }}>
 			<Appbar.Header mode="center-aligned" style={{ backgroundColor: "transparent" }}>
-				<Appbar.BackAction onPress={() => navigation.navigate("Pets")} />
-				<Appbar.Content title="Add a Pet" titleStyle={{ fontWeight: 'bold' }} />
-				<Appbar.Action icon="plus-box-outline" onPress={handleSubmit} color={colors.success} />
+				<Appbar.BackAction onPress={navigation.goBack} />
+				<Appbar.Content title="Edit Pet" titleStyle={{ fontWeight: 'bold' }} />
+				<Appbar.Action icon="send" onPress={handleSubmit} color={colors.success} />
 			</Appbar.Header>
 			<ScrollView style={{ flex: 1 }}>
 				<View style={[styles.profileHeader, { backgroundColor: colors.tertiary }]} >
@@ -190,6 +202,32 @@ const AddPets = () => {
 							<Divider style={{ marginVertical: 8 }} bold />
 						</>
 					)}
+					<Text style={{ marginBottom: 4 }} variant="labelLarge">Set pet status.</Text>
+					<View>
+						<SegmentedButtons
+							value={petStatus}
+							onValueChange={setPetStatus}
+							buttons={[
+								{
+									value: 'Healthy',
+									label: 'Healthy',
+									style: { backgroundColor: petStatus === "Healthy" ? colors.secondary : "transparent" }
+								},
+								{
+									value: 'Sick',
+									label: 'Sick',
+									style: { backgroundColor: petStatus === "Sick" ? colors.secondary : "transparent" }
+								},
+								{
+									value: 'Not Checked',
+									label: 'Not Checked',
+									style: { backgroundColor: petStatus === "Not Checked" ? colors.secondary : "transparent" }
+								},
+							]}
+							style={styles.group}
+						/>
+					</View>
+					<Divider style={{ marginVertical: 8 }} bold />
 					<Text style={{ marginBottom: 4 }} variant="labelLarge">Select the gender of your pet</Text>
 					<View>
 						<SegmentedButtons
@@ -237,7 +275,7 @@ const AddPets = () => {
 	)
 }
 
-export default AddPets
+export default EditPetProfile
 
 const styles = StyleSheet.create({
 	profileHeader: {

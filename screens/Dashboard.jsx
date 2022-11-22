@@ -33,7 +33,7 @@ const Dashboard = () => {
 	}
 
 	return (
-		<SafeAreaView>
+		<SafeAreaView style={{ flex: 1 }}>
 			<View style={styles.header}>
 				<Text variant="titleMedium">Home</Text>
 				<TouchableOpacity onPress={handleSignout} style={styles.logout}><Text variant="labelLarge">Logout</Text></TouchableOpacity>

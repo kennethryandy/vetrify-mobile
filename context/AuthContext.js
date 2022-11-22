@@ -2,6 +2,7 @@ import { collection, doc, getDoc, orderBy, query, where } from "firebase/firesto
 import { createContext, useEffect, useState } from "react";
 import { useCollection } from "react-firebase-hooks/firestore";
 import { fs } from "../firebase-config";
+import { AdminProvider } from "./AdminContext";
 
 
 const AuthContext = createContext();
@@ -17,7 +18,7 @@ export function AuthProvider ({ children, authUser }) {
 
 	// Get all pets base where the ownerId of the pet is equal to the userId of the of the user
 	const petsRef = collection(fs, 'pets');
-	const petsQuery = query(petsRef, where("ownerId", "==", authUser.uid), orderBy('createdAt'));
+	const petsQuery = query(petsRef, where("ownerId", "==", authUser.uid), orderBy('createdAt', 'desc'));
 	const [pets, loadingPets] = useCollection(petsQuery);
 
 	const appointmentsColRef = collection(fs, 'appointments');
@@ -43,7 +44,15 @@ export function AuthProvider ({ children, authUser }) {
 
 	return (
 		<AuthContext.Provider value={{ user, loading, updateUser, pets, loadingPets, appointments, loadingAppointment }}>
-			{children}
+			{user?.role === "admin" ? (
+				<AdminProvider authUser={user}>
+					{children}
+				</AdminProvider>
+			) : (
+				<>
+					{children}
+				</>
+			)}
 		</AuthContext.Provider>
 	)
 }

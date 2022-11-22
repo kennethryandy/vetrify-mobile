@@ -1,44 +1,26 @@
-import { signOut } from 'firebase/auth';
-import { doc, updateDoc } from 'firebase/firestore';
 import moment from 'moment';
-import { useContext, useEffect, useState } from 'react';
-import { SafeAreaView, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native'
+import { useEffect, useState } from 'react';
+import { SafeAreaView, ScrollView, StyleSheet, View } from 'react-native'
 import Spinner from 'react-native-loading-spinner-overlay';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import { Avatar, Button, List, Text, useTheme } from 'react-native-paper';
-import AuthContext from '../context/AuthContext'
-import { auth, fs } from '../firebase-config';
-import PetCard from '../components/PetCard';
+import { Appbar, Avatar, List, Text, useTheme } from 'react-native-paper';
+import PetCard from '../../components/PetCard';
 
 const Tab = createMaterialTopTabNavigator();
 
-const Profile = ({ navigation }) => {
+const UserProfile = ({ route, navigation }) => {
 	const { colors } = useTheme();
-	const { user: currUser, pets } = useContext(AuthContext);
 	const [user, setUser] = useState(null);
 	const [loading, setLoading] = useState(false);
-	const [logoutLoading, setLogoutLoading] = useState(false);
 
 	useEffect(() => {
 		setLoading(true);
-		setUser({ ...currUser, pets: pets.docs.map((pet) => ({ ...pet.data(), id: pet.id })) });
+		if (route.params) {
+			setUser(route.params);
+		}
 		setLoading(false);
-	}, [currUser, pets]);
+	}, [route]);
 
-
-	const editProfileHandler = () => {
-		navigation.navigate('EditProfile');
-	}
-
-	// update the online column of the user to offline and sign out the user.
-	const handleSignout = async () => {
-		setLogoutLoading(true);
-		await updateDoc(doc(fs, "users", user.uid), {
-			online: false
-		});
-		await signOut(auth);
-		setLogoutLoading(false);
-	};
 
 	if (loading || user === null) {
 		return <Spinner visible color={colors.primary} />;
@@ -46,22 +28,21 @@ const Profile = ({ navigation }) => {
 
 	return (
 		<SafeAreaView style={styles.container}>
+			<Appbar.Header mode="small">
+				<Appbar.BackAction onPress={navigation.goBack} />
+			</Appbar.Header>
 			<ScrollView>
-				<Spinner visible={loading || logoutLoading} color={colors.primary} />
+				<Spinner visible={loading} color={colors.primary} />
 				<View style={[styles.profileHeader, { backgroundColor: colors.tertiary }]} >
 					{user?.photoURL ? (
-						<Avatar.Image style={{ alignSelf: "center", marginTop: 50 }} size={100} source={{ uri: user?.photoURL }} />
+						<Avatar.Image style={{ alignSelf: "center", marginTop: 16 }} size={100} source={{ uri: user?.photoURL }} />
 					) : (
-						<Avatar.Icon icon={user?.gender === "Female" ? "face-woman" : "face-man"} size={100} style={{ alignSelf: "center", marginTop: 50 }} />
+						<Avatar.Icon icon={user?.gender === "Female" ? "face-woman" : "face-man"} size={100} style={{ alignSelf: "center", marginTop: 16 }} />
 					)}
 					<Text variant="headlineMedium" style={{ alignSelf: "center", marginTop: 10, fontWeight: 'bold' }}>{`${user?.firstname} ${user?.lastname}`}</Text>
 					<Text variant="labelMedium" style={{ alignSelf: "center", marginBottom: 8 }}>{user?.email}</Text>
-					<Button mode='contained' style={{ width: 150, alignSelf: 'center', marginTop: 5, backgroundColor: "#6eab4d", marginBottom: 20 }} onPress={editProfileHandler}>Edit Profile</Button>
-					<TouchableOpacity onPress={handleSignout} style={styles.logout}>
-						<Text variant="labelLarge">Logout</Text>
-					</TouchableOpacity>
 				</View>
-				<View style={{ flex: 1, borderRadius: 8 }}>
+				<View style={{ flex: 1, borderRadius: 8, marginBottom: 16 }}>
 					{user && (
 						<Tab.Navigator
 							screenOptions={{
@@ -73,9 +54,7 @@ const Profile = ({ navigation }) => {
 							style={{ flex: 1, height: 650 }}
 						>
 							<Tab.Screen name="Basic Info" component={ProfileDetails} initialParams={{ user }} />
-							{user?.role !== "admin" && (
-								<Tab.Screen name="Pets" component={Pets} initialParams={{ pets: user?.pets }} />
-							)}
+							<Tab.Screen name="Pets" component={Pets} initialParams={{ pets: user?.pets }} />
 						</Tab.Navigator>
 					)}
 				</View>
@@ -139,20 +118,20 @@ const Pets = ({ route }) => {
 
 	return (
 		pets.length > 0 ? (
-			<View style={{ marginHorizontal: 12, marginTop: 8 }}>
+			<View style={{ marginHorizontal: 12, marginVertical: 8 }}>
 				{pets.map(pet => (
 					<PetCard pet={pet} key={pet.id} />
 				))}
 			</View>
 		) : (
-			<View style={{ marginTop: 8 }}>
+			<View style={{ marginVertical: 8 }}>
 				<Text style={{ textAlign: "center" }}>No pets</Text>
 			</View>
 		)
 	)
 }
 
-export default Profile
+export default UserProfile
 
 const styles = StyleSheet.create({
 	container: {
