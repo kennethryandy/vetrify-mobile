@@ -6,10 +6,11 @@ import { useNavigation } from '@react-navigation/native';
 import { CalendarList } from 'react-native-calendars';
 import moment from 'moment';
 import { collection, orderBy, query, serverTimestamp, where } from 'firebase/firestore';
-import { auth, fs } from '../firebase-config';
+import { auth, fs } from '../firebaseConfig';
 import AuthContext from '../context/AuthContext';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { useCollection } from 'react-firebase-hooks/firestore';
+import axios from 'axios';
 
 const today = moment().format("YYYY-MM-DD");
 
@@ -23,13 +24,14 @@ const times = [
 
 const purposes = [
 	"Groom",
+	"Vaccine",
 	"Checkup",
-	"Vaccine"
+	"Surgery"
 ];
 
 const UserCalendar = () => {
 
-	const { user, pets } = useContext(AuthContext);
+	const { user, pets, admins } = useContext(AuthContext);
 	const { colors } = useTheme();
 	const [selectedPets, setSelectedPet] = useState([]);
 	const [purpose, setPurpose] = useState("");
@@ -39,10 +41,10 @@ const UserCalendar = () => {
 	const navigation = useNavigation();
 
 	const appointmentsColRef = collection(fs, 'appointments');
-	const appointmentsQuery = query(appointmentsColRef, where("userId", "==", auth.currentUser.uid), where("status", "not-in", ["Deleted", "Cancelled"]), orderBy('status'), orderBy('createdAt'));
+	const appointmentsQuery = query(appointmentsColRef, where("userId", "==", auth.currentUser.uid), where("status", "not-in", ["Deleted", "Cancelled", "Completed"]), orderBy('status'), orderBy('createdAt'));
 	const [appointments, loading] = useCollection(appointmentsQuery);
 	const allAppointmentsQuery = query(appointmentsColRef, where("status", "not-in", ["Deleted", "Cancelled"]), orderBy('status'), orderBy('createdAt'));
-	const [allAppointments, loadingAllAppointments, err] = useCollection(allAppointmentsQuery);
+	const [allAppointments, loadingAllAppointments] = useCollection(allAppointmentsQuery);
 
 	const appointmentsMarks = useMemo(() => {
 		if (appointments?.docs.length > 0) {
@@ -107,6 +109,16 @@ const UserCalendar = () => {
 			status: 'Pending'
 		};
 		navigation.navigate("AddAppointmentLoading", data);
+		if (admins && !admins.empty) {
+			const notifPromises = admins.docs.map(doc => {
+				return axios.post("https://exp.host/--/api/v2/push/send", {
+					"to": doc.data().pushToken,
+					"title": `New Appointment`,
+					"body": `${user.firstname} ${user.lastname} set an appointment on ${moment(day).format("LL")} - ${selectedTime[0]} to ${selectedTime[1]}.`
+				});
+			});
+			await Promise.all(notifPromises);
+		}
 	}
 
 	if (loading || loadingAllAppointments) {

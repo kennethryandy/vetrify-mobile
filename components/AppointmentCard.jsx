@@ -7,7 +7,7 @@ import AuthContext from '../context/AuthContext';
 import AdminContext from '../context/AdminContext';
 
 const AppointmentCard = ({ appointment, handleDeleteIconCick, deletable = true }) => {
-	const { user, pets: userPets } = useContext(AuthContext);
+	const { pets: userPets } = useContext(AuthContext);
 	const adminCtx = useContext(AdminContext);
 	const { colors } = useTheme();
 
@@ -35,6 +35,7 @@ const AppointmentCard = ({ appointment, handleDeleteIconCick, deletable = true }
 		}
 	}).join(", ");
 
+
 	return (
 		<Card elevation={2} style={{ marginVertical: 6, padding: 6, position: "relative" }}>
 			<Card.Title
@@ -46,10 +47,10 @@ const AppointmentCard = ({ appointment, handleDeleteIconCick, deletable = true }
 					</View>
 				}
 				left={(props) => (
-					user?.photoURL ? (
-						<Avatar.Image {...props} source={{ uri: user?.photoURL }} />
+					appointment?.photoURL ? (
+						<Avatar.Image {...props} source={{ uri: appointment?.photoURL }} />
 					) : (
-						<Avatar.Icon icon={user?.gender === "Female" ? "face-woman" : "face-man"} {...props} />
+						<Avatar.Icon icon={appointment?.gender === "Female" ? "face-woman" : "face-man"} {...props} />
 					)
 				)}
 			/>

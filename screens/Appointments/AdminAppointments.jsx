@@ -62,6 +62,11 @@ const AdminAppointments = () => {
 							))}
 						</View>
 					</View>
+					{appointment.description && (
+						<View>
+							<Text variant="bodyMedium">Description: {appointment.description}</Text>
+						</View>
+					)}
 				</Card.Content>
 			</Card >
 		);

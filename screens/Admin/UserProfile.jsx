@@ -142,11 +142,5 @@ const styles = StyleSheet.create({
 		paddingVertical: 20,
 		justifyContent: "center",
 		position: "relative",
-	},
-	logout: {
-		padding: 4,
-		position: "absolute",
-		right: 24,
-		top: 32
 	}
 });

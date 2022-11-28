@@ -1,33 +1,424 @@
+
 export const petsWithBreeds = [
 	{
-		"id": 4,
-		"breed": "Gecko",
-		"type": "reptile"
+		"id": 401,
+		"breed": "Abyssinian",
+		"type": "cat"
 	},
 	{
-		"id": 5,
-		"breed": "Iguane",
-		"type": "reptile"
+		"id": 402,
+		"breed": "American curl",
+		"type": "cat"
 	},
 	{
-		"id": 6,
-		"breed": "Chameleon",
-		"type": "reptile"
+		"id": 403,
+		"breed": "American shorthair",
+		"type": "cat"
 	},
 	{
-		"id": 7,
-		"breed": "Lizard",
-		"type": "reptile"
+		"id": 404,
+		"breed": "American Wirehair",
+		"type": "cat"
 	},
 	{
-		"id": 8,
-		"breed": "Snake",
-		"type": "reptile"
+		"id": 405,
+		"breed": "Anatoli",
+		"type": "cat"
 	},
 	{
-		"id": 9,
-		"breed": "Turtle",
-		"type": "reptile"
+		"id": 406,
+		"breed": "Turkish Angora",
+		"type": "cat"
+	},
+	{
+		"id": 407,
+		"breed": "Asian",
+		"type": "cat"
+	},
+	{
+		"id": 408,
+		"breed": "Australian mist",
+		"type": "cat"
+	},
+	{
+		"id": 409,
+		"breed": "Balinese",
+		"type": "cat"
+	},
+	{
+		"id": 410,
+		"breed": "Bengal",
+		"type": "cat"
+	},
+	{
+		"id": 411,
+		"breed": "Russian Blue",
+		"type": "cat"
+	},
+	{
+		"id": 412,
+		"breed": "American Bobtail",
+		"type": "cat"
+	},
+	{
+		"id": 413,
+		"breed": "Japanese Bobtail",
+		"type": "cat"
+	},
+	{
+		"id": 414,
+		"breed": "Bombay",
+		"type": "cat"
+	},
+	{
+		"id": 415,
+		"breed": "Brazilian shorthair",
+		"type": "cat"
+	},
+	{
+		"id": 416,
+		"breed": "British longhair",
+		"type": "cat"
+	},
+	{
+		"id": 417,
+		"breed": "British shorthair",
+		"type": "cat"
+	},
+	{
+		"id": 419,
+		"breed": "Burmilla",
+		"type": "cat"
+	},
+	{
+		"id": 420,
+		"breed": "Californian rex",
+		"type": "cat"
+	},
+	{
+		"id": 421,
+		"breed": "Californian Spangled",
+		"type": "cat"
+	},
+	{
+		"id": 422,
+		"breed": "European Shorthair",
+		"type": "cat"
+	},
+	{
+		"id": 423,
+		"breed": "Ceylan",
+		"type": "cat"
+	},
+	{
+		"id": 424,
+		"breed": "Chartreux",
+		"type": "cat"
+	},
+	{
+		"id": 425,
+		"breed": "Chantilly-Tiffany",
+		"type": "cat"
+	},
+	{
+		"id": 426,
+		"breed": "Chausie",
+		"type": "cat"
+	},
+	{
+		"id": 427,
+		"breed": "Colorpoint",
+		"type": "cat"
+	},
+	{
+		"id": 428,
+		"breed": "Colorpoint shorthair",
+		"type": "cat"
+	},
+	{
+		"id": 429,
+		"breed": "Cornish rex",
+		"type": "cat"
+	},
+	{
+		"id": 430,
+		"breed": "Cymric",
+		"type": "cat"
+	},
+	{
+		"id": 431,
+		"breed": "Devon rex",
+		"type": "cat"
+	},
+	{
+		"id": 432,
+		"breed": "Donskoy",
+		"type": "cat"
+	},
+	{
+		"id": 433,
+		"breed": "European Shorthair",
+		"type": "cat"
+	},
+	{
+		"id": 434,
+		"breed": "Exotic shorthair",
+		"type": "cat"
+	},
+	{
+		"id": 435,
+		"breed": "German rex",
+		"type": "cat"
+	},
+	{
+		"id": 436,
+		"breed": "Domestic short-haired cat",
+		"type": "cat"
+	},
+	{
+		"id": 437,
+		"breed": "Havana brown",
+		"type": "cat"
+	},
+	{
+		"id": 438,
+		"breed": "Highlander",
+		"type": "cat"
+	},
+	{
+		"id": 439,
+		"breed": "Scottish Fold",
+		"type": "cat"
+	},
+	{
+		"id": 440,
+		"breed": "Himalayan",
+		"type": "cat"
+	},
+	{
+		"id": 442,
+		"breed": "Khao manee",
+		"type": "cat"
+	},
+	{
+		"id": 443,
+		"breed": "Korat",
+		"type": "cat"
+	},
+	{
+		"id": 444,
+		"breed": "Kurilian Bobtail",
+		"type": "cat"
+	},
+	{
+		"id": 445,
+		"breed": "LaPerm",
+		"type": "cat"
+	},
+	{
+		"id": 447,
+		"breed": "Maine Coon",
+		"type": "cat"
+	},
+	{
+		"id": 448,
+		"breed": "Oriental Longhair",
+		"type": "cat"
+	},
+	{
+		"id": 449,
+		"breed": "Manx",
+		"type": "cat"
+	},
+	{
+		"id": 450,
+		"breed": "Arabian Mau",
+		"type": "cat"
+	},
+	{
+		"id": 451,
+		"breed": "Egyptian Mau",
+		"type": "cat"
+	},
+	{
+		"id": 452,
+		"breed": "Minskin",
+		"type": "cat"
+	},
+	{
+		"id": 453,
+		"breed": "Munchkin",
+		"type": "cat"
+	},
+	{
+		"id": 454,
+		"breed": "Nebelung",
+		"type": "cat"
+	},
+	{
+		"id": 455,
+		"breed": "Norwegian",
+		"type": "cat"
+	},
+	{
+		"id": 456,
+		"breed": "Ocicat",
+		"type": "cat"
+	},
+	{
+		"id": 457,
+		"breed": "Ojos azules",
+		"type": "cat"
+	},
+	{
+		"id": 458,
+		"breed": "Oriental",
+		"type": "cat"
+	},
+	{
+		"id": 460,
+		"breed": "Persian",
+		"type": "cat"
+	},
+	{
+		"id": 461,
+		"breed": "Peterbald",
+		"type": "cat"
+	},
+	{
+		"id": 462,
+		"breed": "Pixie-bob",
+		"type": "cat"
+	},
+	{
+		"id": 463,
+		"breed": "Ragamuffin",
+		"type": "cat"
+	},
+	{
+		"id": 464,
+		"breed": "Ragdoll",
+		"type": "cat"
+	},
+	{
+		"id": 465,
+		"breed": "Birman",
+		"type": "cat"
+	},
+	{
+		"id": 466,
+		"breed": "Safari",
+		"type": "cat"
+	},
+	{
+		"id": 467,
+		"breed": "Savannah",
+		"type": "cat"
+	},
+	{
+		"id": 468,
+		"breed": "Scottish fold",
+		"type": "cat"
+	},
+	{
+		"id": 469,
+		"breed": "Selkirk rex",
+		"type": "cat"
+	},
+	{
+		"id": 470,
+		"breed": "Serengeti",
+		"type": "cat"
+	},
+	{
+		"id": 471,
+		"breed": "Seychellois",
+		"type": "cat"
+	},
+	{
+		"id": 472,
+		"breed": "Siamese",
+		"type": "cat"
+	},
+	{
+		"id": 473,
+		"breed": "Siberian",
+		"type": "cat"
+	},
+	{
+		"id": 474,
+		"breed": "Singapura",
+		"type": "cat"
+	},
+	{
+		"id": 475,
+		"breed": "Skookum",
+		"type": "cat"
+	},
+	{
+		"id": 476,
+		"breed": "Snowshoe",
+		"type": "cat"
+	},
+	{
+		"id": 477,
+		"breed": "Sokoke",
+		"type": "cat"
+	},
+	{
+		"id": 478,
+		"breed": "Somali",
+		"type": "cat"
+	},
+	{
+		"id": 479,
+		"breed": "Sphynx",
+		"type": "cat"
+	},
+	{
+		"id": 481,
+		"breed": "Toyger",
+		"type": "cat"
+	},
+	{
+		"id": 482,
+		"breed": "Turkish Van",
+		"type": "cat"
+	},
+	{
+		"id": 483,
+		"breed": "Ural rex",
+		"type": "cat"
+	},
+	{
+		"id": 484,
+		"breed": "York chocolate",
+		"type": "cat"
+	},
+	{
+		"id": 753,
+		"breed": "Other",
+		"type": "cat"
+	},
+	{
+		"id": 981,
+		"breed": "Tonkinese",
+		"type": "cat"
+	},
+	{
+		"id": 982,
+		"breed": "Thai",
+		"type": "cat"
+	},
+	{
+		"id": 983,
+		"breed": "American Burmese",
+		"type": "cat"
+	},
+	{
+		"id": 984,
+		"breed": "English Burmese",
+		"type": "cat"
 	},
 	{
 		"id": 10,
@@ -1850,829 +2241,9 @@ export const petsWithBreeds = [
 		"type": "dog"
 	},
 	{
-		"id": 401,
-		"breed": "Abyssinian",
-		"type": "cat"
-	},
-	{
-		"id": 402,
-		"breed": "American curl",
-		"type": "cat"
-	},
-	{
-		"id": 403,
-		"breed": "American shorthair",
-		"type": "cat"
-	},
-	{
-		"id": 404,
-		"breed": "American Wirehair",
-		"type": "cat"
-	},
-	{
-		"id": 405,
-		"breed": "Anatoli",
-		"type": "cat"
-	},
-	{
-		"id": 406,
-		"breed": "Turkish Angora",
-		"type": "cat"
-	},
-	{
-		"id": 407,
-		"breed": "Asian",
-		"type": "cat"
-	},
-	{
-		"id": 408,
-		"breed": "Australian mist",
-		"type": "cat"
-	},
-	{
-		"id": 409,
-		"breed": "Balinese",
-		"type": "cat"
-	},
-	{
-		"id": 410,
-		"breed": "Bengal",
-		"type": "cat"
-	},
-	{
-		"id": 411,
-		"breed": "Russian Blue",
-		"type": "cat"
-	},
-	{
-		"id": 412,
-		"breed": "American Bobtail",
-		"type": "cat"
-	},
-	{
-		"id": 413,
-		"breed": "Japanese Bobtail",
-		"type": "cat"
-	},
-	{
-		"id": 414,
-		"breed": "Bombay",
-		"type": "cat"
-	},
-	{
-		"id": 415,
-		"breed": "Brazilian shorthair",
-		"type": "cat"
-	},
-	{
-		"id": 416,
-		"breed": "British longhair",
-		"type": "cat"
-	},
-	{
-		"id": 417,
-		"breed": "British shorthair",
-		"type": "cat"
-	},
-	{
-		"id": 419,
-		"breed": "Burmilla",
-		"type": "cat"
-	},
-	{
-		"id": 420,
-		"breed": "Californian rex",
-		"type": "cat"
-	},
-	{
-		"id": 421,
-		"breed": "Californian Spangled",
-		"type": "cat"
-	},
-	{
-		"id": 422,
-		"breed": "European Shorthair",
-		"type": "cat"
-	},
-	{
-		"id": 423,
-		"breed": "Ceylan",
-		"type": "cat"
-	},
-	{
-		"id": 424,
-		"breed": "Chartreux",
-		"type": "cat"
-	},
-	{
-		"id": 425,
-		"breed": "Chantilly-Tiffany",
-		"type": "cat"
-	},
-	{
-		"id": 426,
-		"breed": "Chausie",
-		"type": "cat"
-	},
-	{
-		"id": 427,
-		"breed": "Colorpoint",
-		"type": "cat"
-	},
-	{
-		"id": 428,
-		"breed": "Colorpoint shorthair",
-		"type": "cat"
-	},
-	{
-		"id": 429,
-		"breed": "Cornish rex",
-		"type": "cat"
-	},
-	{
-		"id": 430,
-		"breed": "Cymric",
-		"type": "cat"
-	},
-	{
-		"id": 431,
-		"breed": "Devon rex",
-		"type": "cat"
-	},
-	{
-		"id": 432,
-		"breed": "Donskoy",
-		"type": "cat"
-	},
-	{
-		"id": 433,
-		"breed": "European Shorthair",
-		"type": "cat"
-	},
-	{
-		"id": 434,
-		"breed": "Exotic shorthair",
-		"type": "cat"
-	},
-	{
-		"id": 435,
-		"breed": "German rex",
-		"type": "cat"
-	},
-	{
-		"id": 436,
-		"breed": "Domestic short-haired cat",
-		"type": "cat"
-	},
-	{
-		"id": 437,
-		"breed": "Havana brown",
-		"type": "cat"
-	},
-	{
-		"id": 438,
-		"breed": "Highlander",
-		"type": "cat"
-	},
-	{
-		"id": 439,
-		"breed": "Scottish Fold",
-		"type": "cat"
-	},
-	{
-		"id": 440,
-		"breed": "Himalayan",
-		"type": "cat"
-	},
-	{
-		"id": 442,
-		"breed": "Khao manee",
-		"type": "cat"
-	},
-	{
-		"id": 443,
-		"breed": "Korat",
-		"type": "cat"
-	},
-	{
-		"id": 444,
-		"breed": "Kurilian Bobtail",
-		"type": "cat"
-	},
-	{
-		"id": 445,
-		"breed": "LaPerm",
-		"type": "cat"
-	},
-	{
-		"id": 447,
-		"breed": "Maine Coon",
-		"type": "cat"
-	},
-	{
-		"id": 448,
-		"breed": "Oriental Longhair",
-		"type": "cat"
-	},
-	{
-		"id": 449,
-		"breed": "Manx",
-		"type": "cat"
-	},
-	{
-		"id": 450,
-		"breed": "Arabian Mau",
-		"type": "cat"
-	},
-	{
-		"id": 451,
-		"breed": "Egyptian Mau",
-		"type": "cat"
-	},
-	{
-		"id": 452,
-		"breed": "Minskin",
-		"type": "cat"
-	},
-	{
-		"id": 453,
-		"breed": "Munchkin",
-		"type": "cat"
-	},
-	{
-		"id": 454,
-		"breed": "Nebelung",
-		"type": "cat"
-	},
-	{
-		"id": 455,
-		"breed": "Norwegian",
-		"type": "cat"
-	},
-	{
-		"id": 456,
-		"breed": "Ocicat",
-		"type": "cat"
-	},
-	{
-		"id": 457,
-		"breed": "Ojos azules",
-		"type": "cat"
-	},
-	{
-		"id": 458,
-		"breed": "Oriental",
-		"type": "cat"
-	},
-	{
-		"id": 460,
-		"breed": "Persian",
-		"type": "cat"
-	},
-	{
-		"id": 461,
-		"breed": "Peterbald",
-		"type": "cat"
-	},
-	{
-		"id": 462,
-		"breed": "Pixie-bob",
-		"type": "cat"
-	},
-	{
-		"id": 463,
-		"breed": "Ragamuffin",
-		"type": "cat"
-	},
-	{
-		"id": 464,
-		"breed": "Ragdoll",
-		"type": "cat"
-	},
-	{
-		"id": 465,
-		"breed": "Birman",
-		"type": "cat"
-	},
-	{
-		"id": 466,
-		"breed": "Safari",
-		"type": "cat"
-	},
-	{
-		"id": 467,
-		"breed": "Savannah",
-		"type": "cat"
-	},
-	{
-		"id": 468,
-		"breed": "Scottish fold",
-		"type": "cat"
-	},
-	{
-		"id": 469,
-		"breed": "Selkirk rex",
-		"type": "cat"
-	},
-	{
-		"id": 470,
-		"breed": "Serengeti",
-		"type": "cat"
-	},
-	{
-		"id": 471,
-		"breed": "Seychellois",
-		"type": "cat"
-	},
-	{
-		"id": 472,
-		"breed": "Siamese",
-		"type": "cat"
-	},
-	{
-		"id": 473,
-		"breed": "Siberian",
-		"type": "cat"
-	},
-	{
-		"id": 474,
-		"breed": "Singapura",
-		"type": "cat"
-	},
-	{
-		"id": 475,
-		"breed": "Skookum",
-		"type": "cat"
-	},
-	{
-		"id": 476,
-		"breed": "Snowshoe",
-		"type": "cat"
-	},
-	{
-		"id": 477,
-		"breed": "Sokoke",
-		"type": "cat"
-	},
-	{
-		"id": 478,
-		"breed": "Somali",
-		"type": "cat"
-	},
-	{
-		"id": 479,
-		"breed": "Sphynx",
-		"type": "cat"
-	},
-	{
-		"id": 481,
-		"breed": "Toyger",
-		"type": "cat"
-	},
-	{
-		"id": 482,
-		"breed": "Turkish Van",
-		"type": "cat"
-	},
-	{
-		"id": 483,
-		"breed": "Ural rex",
-		"type": "cat"
-	},
-	{
-		"id": 484,
-		"breed": "York chocolate",
-		"type": "cat"
-	},
-	{
-		"id": 485,
-		"breed": "Zebra finch",
-		"type": "bird"
-	},
-	{
-		"id": 486,
-		"breed": "Goose",
-		"type": "bird"
-	},
-	{
-		"id": 487,
-		"breed": "Swan",
-		"type": "bird"
-	},
-	{
-		"id": 488,
-		"breed": "Duck",
-		"type": "bird"
-	},
-	{
-		"id": 489,
-		"breed": "Peacock",
-		"type": "bird"
-	},
-	{
-		"id": 490,
-		"breed": "Guineafowl",
-		"type": "bird"
-	},
-	{
-		"id": 491,
-		"breed": "Turkey",
-		"type": "bird"
-	},
-	{
-		"id": 492,
-		"breed": "Pigeon",
-		"type": "bird"
-	},
-	{
-		"id": 493,
-		"breed": "Barbary dove",
-		"type": "bird"
-	},
-	{
-		"id": 494,
-		"breed": "Dove",
-		"type": "bird"
-	},
-	{
-		"id": 495,
-		"breed": "Parakeet",
-		"type": "bird"
-	},
-	{
-		"id": 496,
-		"breed": "Lovebird",
-		"type": "bird"
-	},
-	{
-		"id": 497,
-		"breed": "Canary",
-		"type": "bird"
-	},
-	{
-		"id": 499,
-		"breed": "Indian silverbill",
-		"type": "bird"
-	},
-	{
-		"id": 500,
-		"breed": "African silverbill",
-		"type": "bird"
-	},
-	{
-		"id": 501,
-		"breed": "Padda (Calfat)",
-		"type": "bird"
-	},
-	{
-		"id": 502,
-		"breed": "Cou-Coupé (Amadina fasciata)",
-		"type": "bird"
-	},
-	{
-		"id": 503,
-		"breed": "Sparrow",
-		"type": "bird"
-	},
-	{
-		"id": 504,
-		"breed": "Parrot",
-		"type": "bird"
-	},
-	{
-		"id": 505,
-		"breed": "Hen",
-		"type": "bird"
-	},
-	{
-		"id": 506,
-		"breed": "Cockatiel",
-		"type": "bird"
-	},
-	{
-		"id": 627,
-		"breed": "Donkey",
-		"type": "other"
-	},
-	{
-		"id": 630,
-		"breed": "Billy goat",
-		"type": "other"
-	},
-	{
-		"id": 631,
-		"breed": "Goat",
-		"type": "other"
-	},
-	{
-		"id": 632,
-		"breed": "Pig",
-		"type": "other"
-	},
-	{
-		"id": 633,
-		"breed": "Toad",
-		"type": "other"
-	},
-	{
-		"id": 634,
-		"breed": "Snail",
-		"type": "other"
-	},
-	{
-		"id": 635,
-		"breed": "Stone marten",
-		"type": "other"
-	},
-	{
-		"id": 636,
-		"breed": "Ferret",
-		"type": "other"
-	},
-	{
-		"id": 637,
-		"breed": "Frog",
-		"type": "other"
-	},
-	{
-		"id": 638,
-		"breed": "Hedgehog",
-		"type": "other"
-	},
-	{
-		"id": 639,
-		"breed": "Sheep",
-		"type": "other"
-	},
-	{
-		"id": 640,
-		"breed": "Mule",
-		"type": "other"
-	},
-	{
-		"id": 641,
-		"breed": "Tree frog",
-		"type": "other"
-	},
-	{
-		"id": 642,
-		"breed": "Salamander",
-		"type": "other"
-	},
-	{
-		"id": 644,
-		"breed": "Mole",
-		"type": "other"
-	},
-	{
-		"id": 645,
-		"breed": "Newt",
-		"type": "other"
-	},
-	{
-		"id": 646,
-		"breed": "Cow",
-		"type": "other"
-	},
-	{
-		"id": 708,
-		"breed": "Capybara",
-		"type": "rodent"
-	},
-	{
-		"id": 711,
-		"breed": "Chinchilla",
-		"type": "rodent"
-	},
-	{
-		"id": 712,
-		"breed": "Guinea pig",
-		"type": "rodent"
-	},
-	{
-		"id": 737,
-		"breed": "Squirrel",
-		"type": "rodent"
-	},
-	{
-		"id": 739,
-		"breed": "Gerbil",
-		"type": "rodent"
-	},
-	{
-		"id": 740,
-		"breed": "Hamster",
-		"type": "rodent"
-	},
-	{
-		"id": 741,
-		"breed": "Rabbit",
-		"type": "rodent"
-	},
-	{
-		"id": 745,
-		"breed": "Field mouse",
-		"type": "rodent"
-	},
-	{
-		"id": 746,
-		"breed": "Octodon (Degu)",
-		"type": "rodent"
-	},
-	{
-		"id": 747,
-		"breed": "Porc Epic",
-		"type": "rodent"
-	},
-	{
-		"id": 749,
-		"breed": "Rat",
-		"type": "rodent"
-	},
-	{
-		"id": 750,
-		"breed": "Mouse",
-		"type": "rodent"
-	},
-	{
-		"id": 751,
-		"breed": "Other",
-		"type": "rodent"
-	},
-	{
 		"id": 752,
 		"breed": "Other",
 		"type": "dog"
-	},
-	{
-		"id": 753,
-		"breed": "Other",
-		"type": "cat"
-	},
-	{
-		"id": 755,
-		"breed": "Other",
-		"type": "bird"
-	},
-	{
-		"id": 757,
-		"breed": "Other",
-		"type": "other"
-	},
-	{
-		"id": 758,
-		"breed": "Phasmid",
-		"type": "insect"
-	},
-	{
-		"id": 759,
-		"breed": "Arachnid",
-		"type": "insect"
-	},
-	{
-		"id": 760,
-		"breed": "Scorpion",
-		"type": "insect"
-	},
-	{
-		"id": 761,
-		"breed": "Ant",
-		"type": "insect"
-	},
-	{
-		"id": 763,
-		"breed": "Cockroach",
-		"type": "insect"
-	},
-	{
-		"id": 764,
-		"breed": "Earthworm",
-		"type": "insect"
-	},
-	{
-		"id": 765,
-		"breed": "Locust",
-		"type": "insect"
-	},
-	{
-		"id": 766,
-		"breed": "Grasshopper",
-		"type": "insect"
-	},
-	{
-		"id": 767,
-		"breed": "Butterfly",
-		"type": "insect"
-	},
-	{
-		"id": 768,
-		"breed": "Ladybug",
-		"type": "insect"
-	},
-	{
-		"id": 769,
-		"breed": "Dragonfly",
-		"type": "insect"
-	},
-	{
-		"id": 770,
-		"breed": "Pyrrhocore",
-		"type": "insect"
-	},
-	{
-		"id": 771,
-		"breed": "Bee",
-		"type": "insect"
-	},
-	{
-		"id": 772,
-		"breed": "Other",
-		"type": "insect"
-	},
-	{
-		"id": 780,
-		"breed": "Discus",
-		"type": "fish"
-	},
-	{
-		"id": 785,
-		"breed": "Ancistrinae",
-		"type": "fish"
-	},
-	{
-		"id": 790,
-		"breed": "Astronotus Ocellatus",
-		"type": "fish"
-	},
-	{
-		"id": 805,
-		"breed": "Lion head",
-		"type": "fish"
-	},
-	{
-		"id": 806,
-		"breed": "Oranda",
-		"type": "fish"
-	},
-	{
-		"id": 808,
-		"breed": "China Sails",
-		"type": "fish"
-	},
-	{
-		"id": 809,
-		"breed": "Telescopes",
-		"type": "fish"
-	},
-	{
-		"id": 810,
-		"breed": "Ryukin Calico",
-		"type": "fish"
-	},
-	{
-		"id": 825,
-		"breed": "Acanthophthalmus",
-		"type": "fish"
-	},
-	{
-		"id": 826,
-		"breed": "Lined sole",
-		"type": "fish"
-	},
-	{
-		"id": 829,
-		"breed": "Calamoichthys",
-		"type": "fish"
-	},
-	{
-		"id": 844,
-		"breed": "Betta Splenders",
-		"type": "fish"
-	},
-	{
-		"id": 847,
-		"breed": "Guppys",
-		"type": "fish"
-	},
-	{
-		"id": 861,
-		"breed": "Platy",
-		"type": "fish"
-	},
-	{
-		"id": 904,
-		"breed": "Alectis",
-		"type": "fish"
-	},
-	{
-		"id": 964,
-		"breed": "Acanthurus",
-		"type": "fish"
-	},
-	{
-		"id": 977,
-		"breed": "Other",
-		"type": "fish"
 	},
 	{
 		"id": 978,
@@ -2688,31 +2259,6 @@ export const petsWithBreeds = [
 		"id": 980,
 		"breed": "Belgian Sheperd",
 		"type": "dog"
-	},
-	{
-		"id": 981,
-		"breed": "Tonkinese",
-		"type": "cat"
-	},
-	{
-		"id": 982,
-		"breed": "Thai",
-		"type": "cat"
-	},
-	{
-		"id": 983,
-		"breed": "American Burmese",
-		"type": "cat"
-	},
-	{
-		"id": 984,
-		"breed": "English Burmese",
-		"type": "cat"
-	},
-	{
-		"id": 985,
-		"breed": "Gold fish",
-		"type": "fish"
 	},
 	{
 		"id": 986,
@@ -2734,39 +2280,15 @@ export const petsWithBreeds = [
 		"breed": "Pomsky",
 		"type": "dog"
 	}
-];
+]
 
 export const petsType = [
-	{
-		"id": 1,
-		"type": "dog"
-	},
 	{
 		"id": 2,
 		"type": "cat"
 	},
 	{
-		"id": 6,
-		"type": "reptile"
+		"id": 1,
+		"type": "dog"
 	},
-	{
-		"id": 7,
-		"type": "fish"
-	},
-	{
-		"id": 8,
-		"type": "bird"
-	},
-	{
-		"id": 9,
-		"type": "rodent"
-	},
-	{
-		"id": 12,
-		"type": "insect"
-	},
-	{
-		"id": 13,
-		"type": "other"
-	}
 ]

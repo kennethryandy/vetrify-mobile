@@ -1,7 +1,7 @@
 import { collection, doc, getDoc, orderBy, query, where } from "firebase/firestore";
 import { createContext, useEffect, useState } from "react";
 import { useCollection } from "react-firebase-hooks/firestore";
-import { fs } from "../firebase-config";
+import { fs } from "../firebaseConfig";
 
 
 const AdminContext = createContext();

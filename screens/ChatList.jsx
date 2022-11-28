@@ -6,7 +6,7 @@ import { Appbar, Avatar, Divider, List, Searchbar, Text, TouchableRipple, useThe
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import AuthContext from '../context/AuthContext';
-import { fs } from '../firebase-config';
+import { fs } from '../firebaseConfig';
 import { FlatList } from 'react-native-gesture-handler';
 
 const ChatList = () => {
@@ -63,13 +63,28 @@ const ChatList = () => {
 		}
 	}
 
+	const handleNavigateChat = (item) => {
+		navigation.navigate("Chat", {
+			currentUser: {
+				...user,
+				birthDate: null,
+				createdAt: null,
+				updatedAt: null
+			},
+			selectedUser: {
+				...item,
+				birthDate: null,
+				createdAt: null,
+				updatedAt: null
+			}
+		});
+	}
+
 	const usersKeyExtractor = (item) => item.uid;
 
 	// Loop and display all users
 	const usersRenderItem = ({ item }) => (
-		<TouchableRipple onPress={() =>
-			navigation.navigate("Chat", { currentUser: user, selectedUser: item })}
-		>
+		<TouchableRipple onPress={() => handleNavigateChat(item)}>
 			<View>
 				<List.Item
 					title={`${item.firstname} ${item.lastname}`}

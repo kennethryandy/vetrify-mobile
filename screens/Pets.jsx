@@ -20,7 +20,7 @@ const Pets = () => {
 	const petsKeyExtractor = (_, idx) => idx;
 
 	// Loops through the pets and display
-	const petsRenderItem = ({ item }) => <PetCard pet={item} />
+	const petsRenderItem = ({ item }) => <PetCard pet={{ ...item.data(), id: item.id }} />
 
 	if (loadingPets) {
 		return <Spinner visible={true} color={colors.primary} />
@@ -39,7 +39,7 @@ const Pets = () => {
 			) : (pets.docs.length > 0 ? (
 				<View style={{ paddingHorizontal: 16, flex: 1 }}>
 					<FlatList
-						data={pets.docs.map(pet => pet.data())}
+						data={pets.docs.map(pet => pet)}
 						keyExtractor={petsKeyExtractor}
 						renderItem={petsRenderItem}
 					/>

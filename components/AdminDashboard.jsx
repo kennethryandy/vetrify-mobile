@@ -2,7 +2,6 @@ import { ScrollView, View } from 'react-native'
 import { Button, Divider, Text, useTheme } from 'react-native-paper'
 import { useNavigation } from '@react-navigation/native';
 import AppointmentCard from './AppointmentCard';
-import PetCard from './PetCard';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { useContext } from 'react';
 import AdminContext from '../context/AdminContext';
@@ -30,7 +29,7 @@ const AdminDashboard = ({ admin }) => {
 					<>
 						<View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
 							<Text variant='titleMedium'>
-								Recent Joined Users
+								Recently Joined Users
 							</Text>
 							<Button icon="chevron-right" contentStyle={{ flexDirection: "row-reverse" }} compact mode="text" labelStyle={{ paddingRight: 4 }} onPress={() => navigation.navigate("Users")}>
 								View All

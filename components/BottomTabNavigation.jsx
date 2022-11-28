@@ -48,7 +48,7 @@ const BottomTabNavigation = () => {
 			})}
 		>
 			<Tab.Screen name="Appointment" component={AppointmentScreen} />
-			{user.role === "admin" ? (
+			{user?.role === "admin" ? (
 				<Tab.Screen name="Users" component={Users} />
 			) : (
 				<Tab.Screen name="Pets" component={Pets} />

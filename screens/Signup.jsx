@@ -3,12 +3,13 @@ import { Button, HelperText, Paragraph, RadioButton, Text, TextInput, useTheme }
 import _ from 'lodash';
 import { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { auth, fs } from '../firebase-config';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { auth, fs } from '../firebaseConfig';
+import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { setDoc, serverTimestamp, doc } from 'firebase/firestore';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
 import moment from 'moment/moment';
+import { validateSignup } from '../utils/validateSignup';
 
 // Email regular expression for validating email address
 const EMAIL_REGEX =
@@ -28,47 +29,46 @@ const Signup = () => {
 	const [date, setDate] = useState(null);
 	const [loading, setLoading] = useState(false);
 
-	// Error states
-	const [errorPasswordNotMatch, setErrorPasswordNotMatch] = useState(false);
-	const [emailError, setEmailError] = useState(false);
+	const [errors, setErrors] = useState(null);
 
 	// When signup button is clicked
 	const handleSubmit = async () => {
-		// If password and confirm password does not match, set errorPasswordNotMatch to be true and exit.
-		if (password !== confirmpassword) {
-			setErrorPasswordNotMatch(true);
-			return;
-		};
-		// If email is not a valid email address, set emailError to be true and exit.
-		if (!EMAIL_REGEX.test(email)) {
-			setEmailError(true);
-			return;
-		};
-
-		// If first name and last name are not empty, save the user to firebase and update online column to true and role to "user".
 		setLoading(true);
-		if (firstname.trim() !== '' && lastname.trim() !== '') {
+		const { isError, errors } = validateSignup({
+			firstname: firstname,
+			lastname: lastname,
+			password,
+			confirmpassword,
+			email,
+			birthDate: date
+		});
+		if (isError) {
+			setErrors(errors);
+		} else {
+			// If first name and last name are not empty, save the user to firebase and update online column to true and role to "user".
 			createUserWithEmailAndPassword(auth, email, password)
 				.then(async ({ user }) => {
+					const newUser = {
+						firstname: _.capitalize(firstname),
+						lastname: _.capitalize(lastname),
+						email,
+						role: 'user',
+						photoURL: "",
+						online: true,
+						gender,
+						birthDate: date,
+						createdAt: serverTimestamp(),
+						updatedAt: serverTimestamp()
+					}
 					if (user) {
-						const newUser = {
-							firstname: _.capitalize(firstname),
-							lastname: _.capitalize(lastname),
-							email,
-							role: 'user',
-							photoURL: "",
-							online: true,
-							gender,
-							birthDate: date,
-							createdAt: serverTimestamp(),
-							updatedAt: serverTimestamp()
-						}
+						updateProfile(user, {
+							displayName: newUser.firstname + " " + newUser.lastname
+						});
 						await setDoc(doc(fs, "users", user.uid), newUser);
 						setLoading(false);
 					}
 				}).catch((err) => {
 					console.log(err);
-					setEmailError(true);
 					setLoading(false);
 				});
 		}
@@ -78,6 +78,10 @@ const Signup = () => {
 	const onChange = (event, selectedDate) => {
 		const currentDate = selectedDate;
 		setDate(currentDate);
+		setErrors(curr => ({
+			...curr,
+			birthDate: null
+		}));
 	};
 
 	const showDatepicker = () => {
@@ -97,24 +101,54 @@ const Signup = () => {
 	}
 
 	const handleEmailChange = (text) => {
-		if (emailError) {
-			setEmailError(false);
+		if (errors?.email) {
+			setErrors(curr => ({
+				...curr,
+				email: null
+			}));
 		}
 		setEmail(text);
 	}
 	const handlePasswordChange = (text) => {
-		if (errorPasswordNotMatch) {
-			setErrorPasswordNotMatch(false);
+		if (errors?.password) {
+			setErrors(curr => ({
+				...curr,
+				password: null
+			}));
 		}
 		setPassword(text);
 	}
-	const handleConfirmpasswordChange = (text) => setConfirmassword(text);
-	const handleFirstnameChange = (text) => setFirstname(text);
-	const handleLastnameChange = (text) => setLastname(text);
+	const handleConfirmpasswordChange = (text) => {
+		if (errors?.confirmpassword) {
+			setErrors(curr => ({
+				...curr,
+				confirmpassword: null
+			}));
+		}
+		setConfirmassword(text);
+	}
+	const handleFirstnameChange = (text) => {
+		if (errors?.firstname) {
+			setErrors(curr => ({
+				...curr,
+				firstname: null
+			}));
+		}
+		setFirstname(text);
+	}
+	const handleLastnameChange = (text) => {
+		if (errors?.lastname) {
+			setErrors(curr => ({
+				...curr,
+				lastname: null
+			}));
+		}
+		setLastname(text);
+	}
 
 	return (
 		<ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-			<Spinner visible={loading} />
+			<Spinner visible={loading} color={colors.primary} />
 			<View style={styles.logoContainer}>
 				<Image source={require('../assets/logo.png')} style={styles.logo} resizeMode="contain" />
 			</View>
@@ -129,25 +163,37 @@ const Signup = () => {
 					mode="outlined"
 					value={firstname}
 					onChangeText={handleFirstnameChange}
+					error={!!errors?.firstname}
 				/>
+				{errors?.firstname && (
+					<HelperText type="error">
+						{errors?.firstname}
+					</HelperText>
+				)}
 				<TextInput
 					label="Last Name"
 					placeholder="Enter your last name"
 					mode="outlined"
 					value={lastname}
 					onChangeText={handleLastnameChange}
+					error={!!errors?.lastname}
 				/>
+				{errors?.lastname && (
+					<HelperText type="error">
+						{errors?.lastname}
+					</HelperText>
+				)}
 				<TextInput
 					label="Email"
 					placeholder="Enter your email"
 					mode="outlined"
 					value={email}
 					onChangeText={handleEmailChange}
-					error={emailError}
+					error={!!errors?.email}
 				/>
-				{emailError && (
+				{errors?.email && (
 					<HelperText type="error">
-						Invalid email address.
+						{errors?.email}
 					</HelperText>
 				)}
 				<TextInput
@@ -158,8 +204,13 @@ const Signup = () => {
 					onChangeText={handlePasswordChange}
 					secureTextEntry={!showPw}
 					right={<TextInput.Icon icon={showPw ? "eye-off" : "eye"} onPress={() => setShowPw(pw => !pw)} />}
-					error={errorPasswordNotMatch}
+					error={!!errors?.password || !!errors?.confirmpassword}
 				/>
+				{errors?.password && (
+					<HelperText type="error">
+						{errors?.password}
+					</HelperText>
+				)}
 				<TextInput
 					label="Confirm Password"
 					placeholder="Enter your confirm password"
@@ -168,15 +219,15 @@ const Signup = () => {
 					onChangeText={handleConfirmpasswordChange}
 					secureTextEntry={!showConfirmpw}
 					right={<TextInput.Icon icon={showConfirmpw ? "eye-off" : "eye"} onPress={() => setShowConfirmpw(pw => !pw)} />}
-					error={errorPasswordNotMatch}
+					error={!!errors?.confirmpassword}
 				/>
-				{errorPasswordNotMatch && (
+				{!!errors?.confirmpassword && (
 					<HelperText type="error">
-						Password and confirm password does not match.
+						{errors?.confirmpassword}
 					</HelperText>
 				)}
 				<View style={{ marginVertical: 8 }}>
-					<Button icon="calendar" mode="text" onPress={showDatepicker}>
+					<Button textColor={errors?.birthDate ? colors.error : colors.primary} icon="calendar" mode="text" onPress={showDatepicker}>
 						{date ? moment(date).format("LL") : "Date of Birth"}
 					</Button>
 				</View>

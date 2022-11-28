@@ -2,7 +2,7 @@ import { SafeAreaView, StyleSheet, TouchableOpacity, View, Image } from 'react-n
 import { Button, HelperText, Text, TextInput, useTheme } from 'react-native-paper';
 import { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { auth, fs } from '../firebase-config';
+import { auth, fs } from '../firebaseConfig';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { doc, updateDoc } from 'firebase/firestore';

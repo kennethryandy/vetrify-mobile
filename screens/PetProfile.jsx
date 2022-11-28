@@ -1,11 +1,13 @@
 import { SafeAreaView, ScrollView, StyleSheet, View } from 'react-native';
 import _ from 'lodash'
-import Spinner from 'react-native-loading-spinner-overlay';
-import { Appbar, Avatar, Button, List, Text, useTheme } from 'react-native-paper';
+import { Appbar, Avatar, Button, DataTable, Divider, List, Text, TouchableRipple, useTheme } from 'react-native-paper';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import { fs } from '../firebase-config';
+import moment from 'moment';
 import { collection, orderBy, query, where } from 'firebase/firestore';
 import { useCollection } from 'react-firebase-hooks/firestore';
+import { fs } from '../firebaseConfig';
+import Spinner from 'react-native-loading-spinner-overlay';
+import { useNavigation } from '@react-navigation/native';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -13,16 +15,24 @@ const PetProfile = ({ route, navigation }) => {
 	const { pet } = route.params;
 	const { colors } = useTheme();
 
-	const medRecordRef = collection(fs, 'medicalRecords');
+	const medRecordRef = collection(fs, 'medical_records');
 	const medRecordQuery = query(medRecordRef, where("petId", "==", pet.id), orderBy('createdAt', 'desc'));
 	const [medicalRecords, loadingRecords] = useCollection(medRecordQuery);
+
+	const groomRef = collection(fs, 'groom_records');
+	const groomQuery = query(groomRef, where("petId", "==", pet.id), orderBy('createdAt', 'desc'));
+	const [groomRecords, loadingGroom] = useCollection(groomQuery);
+
+	const vaccineRef = collection(fs, 'vaccine_records');
+	const vaccineQuery = query(vaccineRef, where("petId", "==", pet.id), orderBy('createdAt', 'desc'));
+	const [vaccineRecords, loadingVaccing] = useCollection(vaccineQuery)
 
 	const editProfileHandler = () => {
 		navigation.navigate('EditPetProfile', { pet });
 	}
 
-	if (loadingRecords) {
-		return <Spinner visible={true} color={colors.primary} />
+	if (loadingRecords || loadingGroom || loadingVaccing) {
+		return <Spinner visible color={colors.primary} />
 	}
 
 	return (
@@ -40,7 +50,7 @@ const PetProfile = ({ route, navigation }) => {
 				<Text variant="labelMedium" style={{ alignSelf: "center", marginBottom: 8 }}>{pet?.breed} - {_.capitalize(pet?.animalType)}</Text>
 				<Button mode='contained' style={{ width: 150, alignSelf: 'center', marginTop: 5, backgroundColor: "#6eab4d", marginBottom: 20 }} onPress={editProfileHandler}>Edit Pet</Button>
 			</View>
-			<View style={{ flex: 1.8, borderRadius: 8 }}>
+			<View style={{ flex: 1, borderRadius: 8 }}>
 				<Tab.Navigator
 					screenOptions={{
 						lazy: true,
@@ -51,7 +61,7 @@ const PetProfile = ({ route, navigation }) => {
 					style={{ flex: 1, height: 650 }}
 				>
 					<Tab.Screen name="Basic Info" component={PetDetails} initialParams={{ pet }} />
-					<Tab.Screen name="Records" component={Records} initialParams={{ medicalRecords }} />
+					<Tab.Screen name="Records" component={Records} initialParams={{ medicalRecords, groomRecords, vaccineRecords }} />
 				</Tab.Navigator>
 			</View>
 		</SafeAreaView>
@@ -63,7 +73,7 @@ export default PetProfile;
 function PetDetails ({ route }) {
 	const { pet } = route.params;
 	return (
-		<ScrollView style={{ flex: 1 }}>
+		<ScrollView showsVerticalScrollIndicator={false} style={{ flex: 1 }}>
 			<View>
 				<List.Section>
 					<List.Subheader>Pet Details</List.Subheader>
@@ -83,10 +93,30 @@ function PetDetails ({ route }) {
 						description={pet?.breed}
 						descriptionStyle={{ textTransform: "capitalize" }}
 					/>
+					{pet.birthDate && (
+						<>
+							<List.Item
+								title="Birth date"
+								left={() => <List.Icon icon="calendar" />}
+								description={moment(pet.birthDate.toDate()).format("LL")}
+							/>
+							<List.Item
+								title="Age"
+								left={() => <List.Icon icon="calendar" />}
+								description={moment().diff(moment(pet.birthDate.toDate()), 'year')}
+							/>
+						</>
+					)}
 					<List.Item
 						title="Gender"
 						left={() => <List.Icon icon={pet?.gender === "Female" ? "gender-female" : "gender-male"} />}
 						description={pet?.gender || "Male"}
+					/>
+					<List.Item
+						title="Weight (KG)"
+						left={() => <List.Icon icon="paw" />}
+						description={pet?.weight}
+						descriptionStyle={{ textTransform: "capitalize" }}
 					/>
 					<List.Item
 						title="Status"
@@ -100,15 +130,102 @@ function PetDetails ({ route }) {
 }
 
 function Records ({ route }) {
-	const { medicalRecords } = route.params;
+	const navigation = useNavigation();
+	const { colors } = useTheme();
+	const { medicalRecords, groomRecords, vaccineRecords } = route.params;
+
 	return (
-		medicalRecords?.empty || !medicalRecords ? (
-			<View style={{ marginVertical: 16 }}>
-				<Text style={{ textAlign: "center" }}>No Medical Records.</Text>
+		<ScrollView showsVerticalScrollIndicator={false} style={{ padding: 16, flex: 1 }}>
+			<View style={{ marginBottom: 24 }}>
+				<Text variant="titleSmall" style={{ marginBottom: 8, fontWeight: "600" }}>Groom History</Text>
+				{groomRecords.empty ? (
+					<View>
+						<Text style={{ textAlign: "center", marginBottom: 8 }}>No records yet.</Text>
+						<TouchableRipple onPress={() => navigation.navigate("SetAppointments")}>
+							<Text style={{ color: colors.primary, textAlign: "center" }}>Add an appointment.</Text>
+						</TouchableRipple>
+					</View>
+				) : (
+					<DataTable>
+						<DataTable.Header>
+							<DataTable.Title>Date Groomed</DataTable.Title>
+						</DataTable.Header>
+						{groomRecords.docs.map(gr => (
+							<DataTable.Row key={gr.id}>
+								<DataTable.Cell>{moment(gr.data().dateGroomed).format("ll")}</DataTable.Cell>
+							</DataTable.Row>
+						))}
+					</DataTable>
+				)}
 			</View>
-		) : (
-			<View></View>
-		)
+			<View style={{ marginBottom: 24 }}>
+				<Text variant="titleSmall" style={{ marginBottom: 8, fontWeight: "600" }}>Immunization History</Text>
+				{vaccineRecords.empty ? (
+					<View>
+						<Text style={{ textAlign: "center", marginBottom: 8 }}>No records yet.</Text>
+						<TouchableRipple onPress={() => navigation.navigate("SetAppointments")}>
+							<Text style={{ color: colors.primary, textAlign: "center" }}>Add an appointment.</Text>
+						</TouchableRipple>
+					</View>
+				) : (
+					<DataTable>
+						<DataTable.Header>
+							<DataTable.Title>Date</DataTable.Title>
+							<DataTable.Title>Type</DataTable.Title>
+						</DataTable.Header>
+						{vaccineRecords.docs.map(vr => (
+							<DataTable.Row key={vr.id}>
+								<DataTable.Cell>{moment(vr.data().dateCompleted).format("ll")}</DataTable.Cell>
+								<DataTable.Cell>{vr.data().vaccineType}</DataTable.Cell>
+							</DataTable.Row>
+						))}
+					</DataTable>
+				)}
+			</View>
+			<View style={{ marginBottom: 24 }}>
+				<Text variant="titleSmall" style={{ marginBottom: 8, fontWeight: "600" }}>Medical Records</Text>
+				{medicalRecords.empty ? (
+					<View>
+						<Text style={{ textAlign: "center", marginBottom: 8 }}>No records yet.</Text>
+						<TouchableRipple onPress={() => navigation.navigate("SetAppointments")}>
+							<Text style={{ color: colors.primary, textAlign: "center" }}>Add an appointment.</Text>
+						</TouchableRipple>
+					</View>
+				) : (
+					<View>
+						{medicalRecords.docs.map(mr => {
+							console.log(mr.data());
+							return (
+								<DataTable key={mr.id} style={{ marginBottom: 8 }}>
+									<DataTable.Header>
+										<DataTable.Title>Type</DataTable.Title>
+										<DataTable.Title>Description</DataTable.Title>
+										<DataTable.Title>Diagnosis</DataTable.Title>
+									</DataTable.Header>
+
+									<DataTable.Row >
+										<DataTable.Cell>{mr.data()?.type}</DataTable.Cell>
+										<DataTable.Cell>{mr.data()?.description}</DataTable.Cell>
+										<DataTable.Cell>{mr.data()?.diagnosis}</DataTable.Cell>
+									</DataTable.Row>
+									<DataTable.Header>
+										<DataTable.Title>Physical Exam</DataTable.Title>
+										<DataTable.Title>Symptoms</DataTable.Title>
+										<DataTable.Title>Date</DataTable.Title>
+									</DataTable.Header>
+									<DataTable.Row key={mr.id}>
+										<DataTable.Cell>{mr.data()?.physical_exam}</DataTable.Cell>
+										<DataTable.Cell>{mr.data()?.symptoms}</DataTable.Cell>
+										<DataTable.Cell>{mr.data()?.dateCompleted}</DataTable.Cell>
+									</DataTable.Row>
+									<Divider bold style={{ marginBottom: 8, backgroundColor: "#6c6c6c" }} />
+								</DataTable>
+							)
+						})}
+					</View>
+				)}
+			</View>
+		</ScrollView>
 	)
 }
 
@@ -117,7 +234,7 @@ const styles = StyleSheet.create({
 		flex: 1
 	},
 	profileHeader: {
-		flex: 1,
+		flex: .5,
 		paddingVertical: 20,
 		justifyContent: "center",
 	},

@@ -2,7 +2,7 @@ import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Divider, Text, useTheme } from 'react-native-paper';
 import { signOut } from 'firebase/auth';
-import { auth, fs } from '../firebase-config';
+import { auth, fs } from '../firebaseConfig';
 import { useContext, useState } from 'react';
 import AuthContext from '../context/AuthContext';
 import AdminDashboard from '../components/AdminDashboard';
@@ -20,7 +20,8 @@ const Dashboard = () => {
 	const handleSignout = async () => {
 		setLogoutLoading(true);
 		await updateDoc(doc(fs, "users", user.uid), {
-			online: false
+			online: false,
+			pushToken: null,
 		});
 		await signOut(auth);
 		setLogoutLoading(false);

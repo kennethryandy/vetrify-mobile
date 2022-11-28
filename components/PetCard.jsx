@@ -20,7 +20,7 @@ const PetCard = ({ pet }) => {
 
 	return (
 		<Card elevation={2} style={{ marginVertical: 6, }}>
-			<TouchableRipple onPress={() => navigation.navigate("PetProfile", { pet: { ...pet, id: pet.id } })} style={{ padding: 6 }}>
+			<TouchableRipple onPress={() => navigation.navigate("PetProfile", { pet })} style={{ padding: 6 }}>
 				<View>
 					<Card.Title
 						title={

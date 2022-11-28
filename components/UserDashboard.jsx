@@ -72,7 +72,7 @@ const UserDashboard = () => {
 					</View>
 					<Divider bold style={{ marginBottom: 8 }} />
 					{!pets.empty ? (
-						pets.docs.slice(0, 3).map(pet => <PetCard key={pet.id} pet={pet} />)
+						pets.docs.slice(0, 3).map(pet => <PetCard key={pet.id} pet={{ ...pet.data(), id: pet.id }} />)
 					) : (
 						<View>
 							<Text style={{ textAlign: 'center', marginVertical: 8 }} variant="labelLarge">You currently have no pets.</Text>

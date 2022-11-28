@@ -1,9 +1,8 @@
 import { FlatList, Image, StyleSheet, View } from 'react-native'
-import { addDoc, collection, doc, documentId, orderBy, query, serverTimestamp, setDoc, where } from 'firebase/firestore';
+import { addDoc, collection, orderBy, query, serverTimestamp, where } from 'firebase/firestore';
 import { useCollection } from 'react-firebase-hooks/firestore';
-import { fs } from '../firebase-config';
+import { fs } from '../firebaseConfig';
 import { useState } from 'react';
-import Spinner from 'react-native-loading-spinner-overlay';
 import { Avatar, Caption, Divider, IconButton, Paragraph, Text, TextInput, useTheme } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import moment from 'moment';
@@ -19,7 +18,6 @@ const Chat = () => {
 
 	// Initialize the chat id base on the current user id + the selected user id.
 	const chatId = currentUser.uid > selectedUser.uid ? `${currentUser.uid}-${selectedUser.uid}` : `${selectedUser.uid}-${currentUser.uid}`;
-	console.log(chatId);
 
 	// Get all the conversations on both users base on the chat id
 	const chatsRef = collection(fs, 'chats');

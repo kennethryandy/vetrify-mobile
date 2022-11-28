@@ -220,7 +220,7 @@ const AddPets = () => {
 					<Button onPress={showDatepicker}>{moment(date).format("LL")}</Button>
 					<Divider style={{ marginVertical: 8 }} bold />
 					<View style={{ marginTop: 8 }}>
-						<Text style={{ marginBottom: 4 }} variant="labelLarge">Pet's weight</Text>
+						<Text style={{ marginBottom: 4 }} variant="labelLarge">Pet's weight (KG)</Text>
 						<TextInput error={errorWeight} mode="outlined" value={weight} label="Weight" placeholder="Weight" onChangeText={handleWeightChange} />
 						{errorWeight && (
 							<HelperText type="error">

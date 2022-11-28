@@ -8,7 +8,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { doc, serverTimestamp, setDoc } from 'firebase/firestore';
-import { fs } from '../firebase-config';
+import { fs } from '../firebaseConfig';
 import moment from 'moment';
 
 const EditProfile = () => {

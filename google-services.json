@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1007809710621",
+    "project_id": "vetrify-1bca9",
+    "storage_bucket": "vetrify-1bca9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1007809710621:android:51b2e67b364429ceae94f4",
+        "android_client_info": {
+          "package_name": "com.michaeljan.vetrify"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1007809710621-ivs9ssmmkd2e3s05i9n6o4clth5am35t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCf2VBJj-o090bSvoh1IU2TB-ERAdLw_ps"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1007809710621-ivs9ssmmkd2e3s05i9n6o4clth5am35t.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -7,7 +7,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { Avatar, Button, List, Text, useTheme } from 'react-native-paper';
 import AuthContext from '../context/AuthContext'
-import { auth, fs } from '../firebase-config';
+import { auth, fs } from '../firebaseConfig';
 import PetCard from '../components/PetCard';
 
 const Tab = createMaterialTopTabNavigator();
@@ -34,7 +34,8 @@ const Profile = ({ navigation }) => {
 	const handleSignout = async () => {
 		setLogoutLoading(true);
 		await updateDoc(doc(fs, "users", user.uid), {
-			online: false
+			online: false,
+			pushToken: null,
 		});
 		await signOut(auth);
 		setLogoutLoading(false);

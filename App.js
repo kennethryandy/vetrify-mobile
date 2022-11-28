@@ -2,7 +2,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from "@react-navigation/stack";
-import { auth } from './firebase-config';
+import { auth } from './firebaseConfig';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import Login from './screens/Login';
 import Dashboard from './screens/Dashboard';
@@ -21,6 +21,7 @@ import ChatList from './screens/ChatList';
 import PetProfile from './screens/PetProfile';
 import EditPetProfile from './screens/EditPetProfile';
 import UserProfile from './screens/Admin/UserProfile';
+import EmailVerification from './screens/EmailVerification';
 
 const Stack = createStackNavigator();
 
@@ -40,9 +41,9 @@ const paperTheme = {
 	}
 }
 
+
 export default function App () {
 	const [user, loading] = useAuthState(auth);
-
 
 	if (loading) {
 		return <Spinner visible={loading} color={DefaultTheme.colors.primary} />;
@@ -61,21 +62,27 @@ export default function App () {
 				) : (
 					// If user is logged in all the screens below will be available
 					<AuthProvider authUser={user}>
-						<Stack.Navigator>
-							<Stack.Screen name="BottomTabNavigation" component={BottomTabNavigation} options={{ headerShown: false }} />
-							<Stack.Screen name="Home" component={Dashboard} options={{ headerShown: false }} />
-							<Stack.Screen name="AddPets" component={AddPets} options={{ headerShown: false }} />
-							<Stack.Screen name="AddPetLoading" component={AddPetLoading} options={{ headerShown: false }} />
-							<Stack.Screen name="PetProfile" component={PetProfile} options={{ headerShown: false }} />
-							<Stack.Screen name="EditPetProfile" component={EditPetProfile} options={{ headerShown: false }} />
-							<Stack.Screen name="Profile" component={Profile} options={{ headerShown: false }} />
-							<Stack.Screen name="UserProfile" component={UserProfile} options={{ headerShown: false }} />
-							<Stack.Screen name="EditProfile" component={EditProfile} options={{ headerShown: false }} />
-							<Stack.Screen name="Chat" component={Chat} options={{ headerShown: false }} />
-							<Stack.Screen name="ChatList" component={ChatList} options={{ headerShown: false }} />
-							<Stack.Screen name="SetAppointments" component={SetAppointments} options={{ headerShown: false }} />
-							<Stack.Screen name="AddAppointmentLoading" component={AddAppointmentLoading} options={{ headerShown: false }} />
-						</Stack.Navigator>
+						{user.emailVerified ? (
+							<Stack.Navigator screenOptions={{ headerShown: false }}>
+								<Stack.Screen name="BottomTabNavigation" component={BottomTabNavigation} />
+								<Stack.Screen name="Home" component={Dashboard} />
+								<Stack.Screen name="AddPets" component={AddPets} />
+								<Stack.Screen name="AddPetLoading" component={AddPetLoading} />
+								<Stack.Screen name="PetProfile" component={PetProfile} />
+								<Stack.Screen name="EditPetProfile" component={EditPetProfile} />
+								<Stack.Screen name="Profile" component={Profile} />
+								<Stack.Screen name="UserProfile" component={UserProfile} />
+								<Stack.Screen name="EditProfile" component={EditProfile} />
+								<Stack.Screen name="ChatList" component={ChatList} />
+								<Stack.Screen name="Chat" component={Chat} />
+								<Stack.Screen name="SetAppointments" component={SetAppointments} />
+								<Stack.Screen name="AddAppointmentLoading" component={AddAppointmentLoading} />
+							</Stack.Navigator>
+						) : (
+							<Stack.Navigator screenOptions={{ headerShown: false }}>
+								<Stack.Screen name="Email Verification" component={EmailVerification} />
+							</Stack.Navigator>
+						)}
 					</AuthProvider>
 				)}
 			</NavigationContainer>

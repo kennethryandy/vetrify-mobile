@@ -1,22 +1,30 @@
 {
   "expo": {
-		"owner": "michaeljan",
-    "name": "vetrify",
+    "owner": "michaeljan",
+    "name": "Primo Vet",
     "slug": "vetrify",
+		"scheme": "com.michaeljan.vetrify",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
+    "icon": "./assets/logo.png",
+    "userInterfaceStyle": "automatic",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-		"plugins": [
+    "plugins": [
       [
         "expo-image-picker",
         {
           "photosPermission": "The app accesses your photos to let you share them with your friends."
+        }
+      ],
+			[
+        "expo-notifications",
+        {
+          "icon": "./assets/adaptive-icon.png",
+          "color": "#ffffff"
         }
       ]
     ],
@@ -30,13 +38,23 @@
       "supportsTablet": true
     },
     "android": {
+			"package": "com.michaeljan.vetrify",
+			"googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "permissions": [
+        "android.permission.RECORD_AUDIO"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "4abad02c-8f77-41de-b0eb-dcb2855232a1"
+      }
     }
   }
 }

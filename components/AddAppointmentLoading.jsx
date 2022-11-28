@@ -3,7 +3,7 @@ import { useEffect } from 'react'
 import { Text, useTheme } from 'react-native-paper'
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { addDoc, collection } from 'firebase/firestore';
-import { fs } from '../firebase-config';
+import { fs } from '../firebaseConfig';
 
 const AddAppointmentLoading = () => {
 	const { colors } = useTheme();
