@@ -96,7 +96,7 @@ const Appointment = () => {
             tabBarIndicatorStyle: { backgroundColor: colors.primary },
             tabBarLabelStyle: { fontSize: 12, textTransform: "capitalize" },
           }}
-          style={{ flex: 1, height: 750 }}
+          style={{ flex: 1, height: 700 }}
         >
           <Tab.Screen
             name="Pending"
