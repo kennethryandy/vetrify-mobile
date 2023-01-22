@@ -10,6 +10,7 @@ const SingleSelect = ({ value, label = "", onSelect, list }) => {
       arrayList={list}
       selectedArrayList={value?.selectedList || []}
       multiEnable={true}
+      selectAllEnable={false}
     />
   );
 };

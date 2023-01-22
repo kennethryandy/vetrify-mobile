@@ -9357,15 +9357,22 @@ react-native-loading-spinner-overlay@^3.0.1:
   resolved "https://registry.yarnpkg.com/react-native-loading-spinner-overlay/-/react-native-loading-spinner-overlay-3.0.1.tgz#092481b8cce157d3af5ef942f845ad981f96bd36"
   integrity sha512-4GdR54HQnKg2HPSSisVizfTLuyhSh4splY9eb8mKiYF1Ihjn/5EmdNo5bN3S7uKPFRC3WLzIZIouX6G6fXfnjw==
 
+react-native-multiple-select@^0.5.12:
+  version "0.5.12"
+  resolved "https://registry.yarnpkg.com/react-native-multiple-select/-/react-native-multiple-select-0.5.12.tgz#be9204f49bc1bb734c40422a89acc173959bcd70"
+  integrity sha512-lFw0u798/2qHr4TwDdxMtReRtsNOCC2SWPzWHRGKE4XcBiUll0hHhke7iqQg4xJdfo46C/h69f1ZXphDOjZY3A==
+  dependencies:
+    prop-types "^15.7.2"
+
 react-native-pager-view@5.4.24:
   version "5.4.24"
   resolved "https://registry.yarnpkg.com/react-native-pager-view/-/react-native-pager-view-5.4.24.tgz#8626e757ddc55e41eca66d2f8a8a75aec54591ee"
   integrity sha512-dRMB7i3B+mu4NCeIN6gqbR/kC/rr2wzqO0gisXDdJwJr78G24sWoTNpLEDFo3G8TFHY9nTMutVl5CUvkN2dp6g==
 
-react-native-paper-select@^0.3.8:
-  version "0.3.8"
-  resolved "https://registry.yarnpkg.com/react-native-paper-select/-/react-native-paper-select-0.3.8.tgz#ccc9363ab92a287f7e993edf26d7b7f000f3a35d"
-  integrity sha512-qWu5xudEha8HhsSJU1G8YWMoqoRyjUgfXUCyeU4YSmoE+jLijf396CKUikPkcy9C9kxOpXRb5LjvC3iEHaxLbg==
+react-native-paper-select@0.4.0:
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/react-native-paper-select/-/react-native-paper-select-0.4.0.tgz#e2c370e3116de289a286c035b37da4515f6f74ea"
+  integrity sha512-P/jTk7+38M7t/CGMJF2pMHW0gigHJEsyMNesQHWbE793Y2M9bZBx0qr27dLnzkmCFW66xPHVZQmj3mQJEKgWng==
 
 react-native-paper@5.0.0-rc.6:
   version "5.0.0-rc.6"

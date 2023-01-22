@@ -41,7 +41,8 @@ const UserCalendar = () => {
   const { user, pets, admins } = useContext(AuthContext);
   const { colors } = useTheme();
   const [selectedPets, setSelectedPet] = useState([]);
-  const [purpose, setPurpose] = useState("");
+  const [selectedPetNames, setSelectedPetNames] = useState([]);
+  const [purpose, setPurpose] = useState([]);
   const [day, setDay] = useState(today);
   const [selectedTime, setSelectedTime] = useState(null);
   const [description, setDescription] = useState("");
@@ -100,15 +101,22 @@ const UserCalendar = () => {
     setDay(day.dateString);
   };
 
-  const handleSelectedPets = (id) => {
-    const isSelected = selectedPets.findIndex((p) => p === id);
+  const handleSelectedPets = (doc) => {
+    const isSelected = selectedPets.findIndex((p) => p === doc.id);
     if (isSelected !== -1) {
-      const newSelected = selectedPets.filter((p) => p !== id);
+      const newSelected = selectedPets.filter((p) => p !== doc.id);
+      const newSelectedName = selectedPets.filter(
+        (p) => p !== doc.data().nickname
+      );
       setSelectedPet(newSelected);
+      setSelectedPetNames(newSelectedName);
     } else {
-      setSelectedPet((curr) => [...curr, id]);
+      setSelectedPet((curr) => [...curr, doc.id]);
+      setSelectedPetNames((curr) => [...curr, doc.data().nickname]);
     }
   };
+
+  console.log(selectedPets);
 
   const handleDescriptionChange = (text) => {
     setDescription(text);
@@ -125,7 +133,8 @@ const UserCalendar = () => {
       day,
       time: selectedTime[0] + " - " + selectedTime[1],
       petIds: selectedPets,
-      purpose,
+      petName: selectedPetNames,
+      purpose: purpose,
       description,
       createdAt: serverTimestamp(),
       status: "Pending",
@@ -179,8 +188,11 @@ const UserCalendar = () => {
           const alreadySet = allAppointments.docs.findIndex(
             (doc) =>
               doc.data().day === day &&
-              doc.data().time === `${time[0]} - ${time[1]}`
+              doc.data().time === `${time[0]} - ${time[1]}` &&
+              doc.data().status !== "Completed"
           );
+          console.log(allAppointments.docs);
+
           return (
             <View style={styles.time} key={idx}>
               <TouchableRipple
@@ -222,7 +234,7 @@ const UserCalendar = () => {
             <Chip
               key={doc.id}
               style={styles.chip}
-              onPress={() => handleSelectedPets(doc.id)}
+              onPress={() => handleSelectedPets(doc)}
               mode="outlined"
               showSelectedOverlay
               avatar={
@@ -249,10 +261,17 @@ const UserCalendar = () => {
           <Chip
             key={idx}
             style={styles.chip}
-            onPress={() => setPurpose(p)}
+            onPress={() => {
+              if (purpose.findIndex((pr) => pr === p) !== -1) {
+                const newPurpose = purpose.filter((pr) => pr !== p);
+                setPurpose(newPurpose);
+              } else {
+                setPurpose((currState) => [...currState, p]);
+              }
+            }}
             mode="outlined"
             showSelectedOverlay
-            selected={purpose === p}
+            selected={purpose.findIndex((pr) => pr === p) !== -1}
             textStyle={{ textTransform: "capitalize" }}
           >
             {p}

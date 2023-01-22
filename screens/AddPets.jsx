@@ -68,6 +68,7 @@ const AddPets = () => {
 
   const onBreedSelect = (value) => setBreed(value);
 
+  console.log(breed);
   // When the avatar or change avatar button is clicked, open the gallery.
   const handleImageChange = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -143,7 +144,7 @@ const AddPets = () => {
         <Appbar.BackAction onPress={() => navigation.navigate("Pets")} />
         <Appbar.Content title="Add a Pet" titleStyle={{ fontWeight: "bold" }} />
         <Appbar.Action
-          icon="plus-box-outline"
+          icon="check-circle"
           onPress={handleSubmit}
           color={colors.success}
         />
@@ -297,6 +298,7 @@ const AddPets = () => {
           <Text style={{ marginBottom: 4 }} variant="labelLarge">
             Pet's description
           </Text>
+
           <TextInput
             mode="outlined"
             multiline
